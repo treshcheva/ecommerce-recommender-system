@@ -1,461 +1,473 @@
-# Retailrocket E-commerce Recommender
+# Клинический компас
 
-An end-to-end implicit-feedback recommendation project on the Retailrocket
-e-commerce dataset. The notebooks walk from exploratory analysis through
-leakage-aware model selection to a final chronological test evaluation. Reusable
-loading, splitting, recommendation, and metric code lives in `src/`.
+Адаптивный прототип связанных кабинетов пациента и врача с локальным FastAPI-сервисом и SQLite.
 
-## Project walkthrough
+Уже работают вход для врача и пациента, самоотчёт пациента, его отображение у врача, подтверждение плана врачом, просмотр плана пациентом и история отметок. Медицинские данные сохраняются сервером в `data/clinical_compass.db` и доступны после перезапуска браузера и сервера.
 
-The canonical source notebooks are listed below. They are shared by dev/full
-and stored without execution outputs:
+Все имена и медицинские данные синтетические. Автоматических клинических назначений прототип не выполняет.
 
-1. [01_eda.ipynb](notebooks/01_eda.ipynb) — event mix, time trends, user/item
-   activity, matrix sparsity, and split checks.
-2. [02_modeling.ipynb](notebooks/02_modeling.ipynb) — Global/Recent Popularity,
-   ItemKNN and implicit ALS, including validation-only hyperparameter search.
-3. [03_evaluation.ipynb](notebooks/03_evaluation.ipynb) — final test evaluation
-   of the validation-selected baselines and recommenders, errors, cold start,
-   and recommendation examples.
-4. [04_learning_to_rank.ipynb](notebooks/04_learning_to_rank.ipynb) — a
-   two-stage ItemKNN + implicit ALS candidate pipeline, CatBoostRanker search,
-   feature ablations, and final five-model comparison.
+Вход по логину и паролю (демо-учётные записи: врач `doctor` / `doctor2026`, пациент `patient` / `patient2026`). Подробности — в разделе «Вход и сессии».
 
-Read the executed [dev notebooks](outputs/dev/notebooks/README.md) or
-[full notebooks](outputs/full/notebooks/README.md) for tables, concrete
-conclusions and inline visualizations. Figures and machine-readable metrics
-are saved alongside the corresponding run artifacts.
-
-## Notebook source and run artifacts
-
-| Location | Purpose |
-|---|---|
-| `notebooks/` | The only editable source for notebook code and research narrative; no execution outputs |
-| `outputs/dev/notebooks/` | Executed dev artifacts; dev metrics/figures/models retain their established locations under `outputs/` |
-| `outputs/full/notebooks/` | Executed full artifacts with the full results, not an independently maintained code branch |
-| `src/` | Reusable model, metric, preprocessing and execution helpers |
-
-Both runners read **only `notebooks/`**. Runtime environment parameters select
-`BENCHMARK_MODE=dev|full` and `RESUME_EXPERIMENTS=0|1`; paths come from the
-shared benchmark configuration. No runner injects, regex-replaces or rewrites
-cell source. Memory cleanup, 300 dpi rendering, ranker checkpoint recovery
-and ablation reuse now live in the canonical notebooks for both modes.
-Hyperparameter grids remain in notebooks 02/04.
-
-`python -m scripts.run_experiments --mode dev` executes canonical notebooks
-02→03→04 and writes their executed copies to `outputs/dev/notebooks/` without
-changing the source files. `python -m scripts.run_full` reads those same
-canonical sources and writes to `outputs/full/notebooks/`; compatible completed
-stages are skipped. Changed source code or a damaged completed artifact causes
-a clear error rather than silently reusing a stale checkpoint or automatically
-repeating an expensive full run. Interactive notebooks default to a fresh
-search (`RESUME_EXPERIMENTS=0`); the full CLI explicitly enables resume.
-For notebook 01, execute the source into a separate output location:
+## Быстрый запуск на Ubuntu / WSL
 
 ```bash
-jupyter nbconvert --to notebook --execute notebooks/01_eda.ipynb --output 01_eda.ipynb --output-dir outputs/dev/notebooks
-# Static audit: compares every cell source and verifies preserved outputs;
-# it never executes notebook cells.
-python -m scripts.check_notebook_sources
+cd /mnt/d/datacon_2026/clinical-compass
+bash run-local.sh
 ```
 
-The source consolidation did **not** rerun any experiments. Current full
-outputs, execution counts, result summaries, metrics, models and plots were
-preserved. Run-specific full conclusions are display outputs, so every cell's
-code and narrative source can match the canonical notebook exactly. Metadata
-records that sources were synchronized without repeating execution; archived
-pre-consolidation source/artifact bytes remain in
-[`outputs/full/logs/source_unification_before/`](outputs/full/logs/source_unification_before/).
-The [alignment audit](outputs/full/logs/notebook_source_alignment.json) covers
-all seven dev/full artifact copies. Existing dev outputs are historical outputs
-preserved during consolidation; the next dev execution will regenerate them
-from the canonical source.
+При первом запуске скрипт создаёт `.venv` внутри проекта и устанавливает зависимости. Затем откройте:
 
-## Full experiment results
+- сайт: http://localhost:8000
+- проверка API: http://localhost:8000/api/health
+- документация API: http://localhost:8000/docs
 
-The completed expanded benchmark contains **57,811 users and 10,000 items** selected from train only. Selected events: train **370,990**, validation **13,460**, test **7,081**. Ranking means use **1,627 validation users / 1,058 test users** with new in-catalog targets.
+Остановка сервера: `Ctrl+C`.
 
-| Model | Test NDCG@10 | Recall@10 | Precision@10 | Coverage@10 |
-|---|---:|---:|---:|---:|
-| CatBoostRanker (ALS + ItemKNN) | 0.04455 | 0.06686 | 0.01295 | 0.34090 |
-| ItemKNN | 0.03599 | 0.05348 | 0.01068 | 0.42160 |
-| implicit ALS | 0.03168 | 0.04821 | 0.00907 | 0.25210 |
-| Global Popularity | 0.00639 | 0.00597 | 0.00236 | 0.00340 |
-| Recent Popularity (14d) | 0.00554 | 0.00929 | 0.00302 | 0.00240 |
-
-The full test preserves a higher CatBoost mean than both generators:
-
-- **CatBoost minus implicit ALS**: ΔNDCG@10 **+0.01287**, 95% paired bootstrap CI **[+0.00759, +0.01852]**.
-- **CatBoost minus ItemKNN**: ΔNDCG@10 **+0.00856**, 95% paired bootstrap CI **[+0.00282, +0.01424]**.
-
-Both intervals exclude zero in the positive direction. Unlike dev, these data support a positive difference on the full test cohort. This is conditional evidence from 5,000 user resamples (seed 42), not proof across time periods or independent training seeds; intervals are not multiplicity adjusted.
-
-The validation-selected configurations are ItemKNN `neighbors=25, shrinkage=10`; ALS `factors=64, regularization=0.05, alpha=20, iterations=8`; CatBoost `depth=4, learning_rate=0.05`, best iteration 33 (34 trees). The unchanged search spaces selected different points from dev. CatBoost depths 4/0.05 and 6/0.03 differ by only 0.00006 validation NDCG; this does not establish a universal hyperparameter winner.
-
-Full validation ablations yield NDCG **0.06581** (all features), **0.06486** (without scores), **0.02273** (without all seven generator features), and **0.06232** (without user/item aggregates). Removing all generator features loses **65.5%** on fixed candidates; variant-minus-full CI is **[−0.05166, −0.03494]**. Removing only scores has CI **[−0.00356, +0.00169]**, including zero: the information retained in ranks/source flags matters when interpreting the score-only ablation. These are diagnostic comparisons on the same validation used for selection, not independent feature-effect estimates.
-
-### Dev → full: test comparison
-
-Each cell shows **dev → full**. Cohorts, target sets and catalog size differ; raw score changes are not a controlled model improvement or degradation.
-
-| Model | NDCG@10 | Recall@10 | Precision@10 | Coverage@10 |
-|---|---:|---:|---:|---:|
-| CatBoostRanker (ALS + ItemKNN) | 0.07205 → 0.04455 | 0.10983 → 0.06686 | 0.01959 → 0.01295 | 0.31667 → 0.34090 |
-| ItemKNN | 0.05781 → 0.03599 | 0.09000 → 0.05348 | 0.01486 → 0.01068 | 0.33467 → 0.42160 |
-| implicit ALS | 0.05530 → 0.03168 | 0.09436 → 0.04821 | 0.01622 → 0.00907 | 0.41067 → 0.25210 |
-| Global Popularity | 0.01074 → 0.00639 | 0.02083 → 0.00597 | 0.00338 → 0.00236 | 0.01667 → 0.00340 |
-| Recent Popularity (14d) | 0.01658 → 0.00554 | 0.02534 → 0.00929 | 0.00405 → 0.00302 | 0.01333 → 0.00240 |
-
-Execution: 02 **172.7s**, 03 **24.3s**, successful 04 **171.6s**. The first 04 attempt was stopped after **214.1s** when swap grew beyond 256 MiB; the user explicitly authorized continuation without that swap threshold. Cached search/ablations were reused, and only the selected CatBoost model was reconstructed and checked against saved validation metrics. Sampled active runner time, including both attempts and preflight, was **590.3s**; sampled peak runner-plus-kernel RSS was **1.103 GiB**. RSS was sampled every 250 ms, sums shared pages more than once, and is not an exact OS high-water mark.
-
-Full notebooks: [02](outputs/full/notebooks/02_modeling.ipynb), [03](outputs/full/notebooks/03_evaluation.ipynb), [04](outputs/full/notebooks/04_learning_to_rank.ipynb). [Report](outputs/full/REPORT.md), [dev/full tables](outputs/full/metrics/dev_full_comparison.csv), [confidence intervals](outputs/full/metrics/catboost_test_contrasts.csv), [resource and execution manifest](outputs/full/metrics/full_execution_manifest.json), [resource samples](outputs/full/logs/resource_samples.jsonl). All full PNG figures are 300 dpi. During the full computation, SHA-256 checks verified that dev artifacts were unchanged. The later source consolidation preserved all historical outputs while moving executed dev notebooks to `outputs/dev/notebooks/`.
-
-![Dev and full test metrics](outputs/full/figures/dev_full_test.png)
-
-![Full paired confidence intervals](outputs/full/figures/catboost_test_contrasts.png)
-
-## Results (dev)
-
-The primary metric is macro NDCG@10. This comparison uses **binary relevance**:
-any view, cart addition, or transaction in the target interval is relevant.
-The same users, fixed catalog, and relevance definition are used for every row.
-The five models are global popularity, recent popularity, ItemKNN, library ALS
-from `implicit`, and CatBoostRanker. All hyperparameter choices are made on
-chronological validation data; test is used only for the final evaluation.
-Binary relevance is also used to select ItemKNN/ALS parameters in notebook 02
-and to evaluate the four shared models in notebook 03. Notebook 04 checks that
-all shared NDCG, Recall, Precision, Coverage and evaluated-user counts match
-02/03. Training interaction weights remain view=1, cart=3, transaction=5;
-these weights do not define primary evaluation relevance.
-
-| Model | Validation NDCG@10 | Test NDCG@10 | Test Recall@10 | Test Precision@10 | Test Coverage@10 |
-|---|---:|---:|---:|---:|---:|
-| Global Popularity | 0.0257 | 0.0107 | 0.0208 | 0.0034 | 0.0167 |
-| Recent Popularity (14d) | 0.0326 | 0.0166 | 0.0253 | 0.0041 | 0.0133 |
-| ItemKNN | 0.0695 | 0.0578 | 0.0900 | 0.0149 | 0.3347 |
-| implicit ALS | 0.0816 | 0.0553 | 0.0944 | 0.0162 | 0.4107 |
-| CatBoostRanker (ALS + ItemKNN) | **0.0914** | **0.0720** | **0.1098** | **0.0196** | 0.3167 |
-
-Validation metrics average over 242 users; test metrics average over 148 users.
-The benchmark uses a train-selected cohort of 20,000 users and a fixed
-1,500-item catalog; only users with at least one new target item in that catalog
-contribute to the ranking averages. In this run the selected CatBoostRanker
-improves test NDCG and recall over the individual generators, but its catalog
-coverage is lower than implicit ALS and ItemKNN. The test candidate recall is
-**0.2753** for the deduplicated union of up to 100 candidates per source (up to
-200 unique items), so many relevant products still do not reach the ranker.
-
-The ItemKNN search selected `neighbors=50, shrinkage=10` (validation NDCG@10
-**0.0695** under the binary protocol). The implicit ALS search selected
-`factors=64, regularization=0.05, alpha=10, iterations=8` (validation NDCG@10
-**0.0816**, binary). The three-configuration CatBoost search selected
-`depth=6, learning_rate=0.03`, with best iteration 62 and validation NDCG@10
-**0.0914** under binary relevance.
-
-The validation-only feature ablation gives NDCG@10 **0.0914** with all 18
-features, **0.0846** without the two score features, **0.0376** after removing
-**all seven generator features** (scores, ranks, presence flags, candidate
-source), and **0.0773** without user/item aggregates. Complete generator-feature
-removal reduces NDCG by 0.05384 (58.9%); its paired 95% interval, variant minus
-full model, is [−0.07909, −0.03069]. Removing only scores has an interval
-[−0.01691, +0.00233], which includes zero. The full removal experiment retains
-the same ALS/ItemKNN-generated candidates and all 11 user/item aggregates: it
-measures added reranking information, not the value of candidate generation
-itself. Each variant selects its own iteration on validation; the full feature
-set is fixed for test independently of these diagnostic ablations.
-
-Paired user bootstrap uses 5,000 resamples, seed 42, and percentile 95%
-confidence intervals. CatBoost minus ItemKNN on test is **+0.01424** (+24.6%),
-with CI **[−0.00956, +0.03727]**; CatBoost minus ALS is **+0.01675**,
-CI **[−0.00374, +0.03822]**. Both include zero: this cohort does **not** establish
-an improvement over the collaborative generators despite the higher means.
-ALS minus ItemKNN on validation is +0.01209, CI [−0.00699, +0.03164].
-These intervals are conditional on fixed models and this temporal cohort; they
-do not account for shared-item dependence, training-seed variability, or
-multiple comparisons. Validation intervals and ablations are further affected
-by selection on the same validation period. They are diagnostic, not independent
-confirmation. Test is never used to revise parameters or feature selection.
-
-Test NDCG@10 by pre-test user activity also differs: CatBoost scores 0.0365,
-0.0584, and 0.1266 in the low-, medium-, and high-activity groups respectively
-(51, 51, and 46 evaluated users). It is slightly below ItemKNN for the
-low-activity group (0.0404), but substantially higher for high-activity users
-(ItemKNN 0.0766). The aggregate improvement therefore does not imply the same
-benefit for users with little history.
-
-Candidate recall has an explicit row schema: `generator`, `metric`, `cutoff`,
-`recall`, `users`, `split`. Individual sources report **Recall@100**; the union
-reports **Recall@200**. The union is restricted to each source's top 100 and
-contains at most 200 distinct unseen items. Its improvement also includes a
-larger candidate budget; it is not an equal-budget comparison. Users with
-eligible targets but no candidates contribute zero.
-
-`CandidateRankerRecommender` binds to a single `snapshot_id`. With multiple
-snapshots callers must specify one explicitly; only that snapshot is scored.
-The same user/item appearing in another period cannot enter its recommendations.
-
-Machine-readable results:
-[validation metrics](outputs/metrics/ltr_validation_metrics.csv),
-[test metrics](outputs/metrics/ltr_test_metrics.csv),
-[ItemKNN search](outputs/metrics/itemknn_tuning_validation.csv),
-[ALS search](outputs/metrics/implicit_als_tuning_validation.csv),
-[selected parameters](outputs/metrics/selected_model_params.json),
-[CatBoost search](outputs/metrics/ltr_catboost_tuning_validation.csv),
-[feature ablation](outputs/metrics/ltr_ablation_validation.csv),
-[activity groups](outputs/metrics/ltr_activity_groups.csv),
-[candidate recall](outputs/metrics/ltr_candidate_recall.csv),
-[feature importance](outputs/metrics/ltr_feature_importance.csv),
-[test paired confidence intervals](outputs/metrics/ltr_test_paired_intervals.csv),
-[ablation intervals](outputs/metrics/ltr_ablation_paired_intervals.csv),
-[test per-user scores](outputs/metrics/ltr_test_per_user.csv).
-
-## Selected visualizations
-
-![Event mix and daily activity](outputs/figures/notebook_eda_events_time.png)
-
-![User and item activity distributions](outputs/figures/notebook_eda_activity_distributions.png)
-
-![Item popularity concentration](outputs/figures/notebook_eda_item_concentration.png)
-
-![Validation model comparison](outputs/figures/model_validation_comparison.png)
-
-![ItemKNN validation hyperparameter search](outputs/figures/itemknn_tuning_validation.png)
-
-![implicit ALS validation hyperparameter search](outputs/figures/implicit_als_tuning_validation.png)
-
-![Test error analysis](outputs/figures/test_error_analysis.png)
-
-![Learning-to-rank metric comparison](outputs/figures/learning_to_rank_metrics.png)
-
-![CatBoost validation hyperparameter search](outputs/figures/ltr_catboost_tuning_validation.png)
-
-![CatBoost validation feature ablation](outputs/figures/ltr_feature_ablation_validation.png)
-
-![CatBoost feature importance](outputs/figures/ltr_feature_importance.png)
-
-![Test quality by user activity](outputs/figures/ltr_activity_groups.png)
-
-Original EDA plots from the reusable script are retained:
-[event types](outputs/figures/event_types.png),
-[daily activity](outputs/figures/daily_activity.png),
-[top items](outputs/figures/top_items.png), and
-[user activity](outputs/figures/user_activity.png).
-
-## Dataset
-
-This project uses the [Retailrocket E-commerce Dataset on Kaggle](https://www.kaggle.com/datasets/retailrocket/ecommerce-dataset).
-The dataset is downloaded separately; **the entire `data/` directory is ignored
-by Git**, including raw files, generated splits and `.gitkeep` files.
-
-1. Open the Kaggle link and download the dataset archive (sign in if required).
-2. Extract it locally. Create `data/raw/` in the project root and place
-   **`events.csv` directly at `data/raw/events.csv`**, without an extra nested
-   archive directory. Keep the original column names.
-3. Other archive files can be kept in `data/raw/`; the current recommendation
-   pipeline needs only `events.csv`. Item properties and the category tree are
-   optional and are not used by the current models.
-4. Generate `data/processed/` with the command below. Do not download or manually
-   construct the processed splits: they are derived chronologically from events.
-
-Expected local layout:
-
-```text
-data/                              # entirely excluded from Git
-├── raw/
-│   ├── events.csv                 # required: timestamp, visitorid, event, itemid
-│   ├── category_tree.csv          # optional; unused by the current pipeline
-│   ├── item_properties_part1.csv  # optional; unused by the current pipeline
-│   └── item_properties_part2.csv  # optional; unused by the current pipeline
-└── processed/                     # created automatically
-    ├── train.csv
-    ├── validation.csv
-    ├── test.csv
-    └── split_manifest.json
-```
-
-`events.csv` timestamps are Unix milliseconds. The loader converts them to UTC
-and validates required columns. The EDA preparation command creates directories,
-EDA figures and a reproducible 70/15/15 split by distinct timestamps; tied
-timestamps stay together. It does not fit recommendation models. On an existing
-checkout, running it regenerates processed splits and EDA outputs from the raw
-file, so keep the same source dataset when reproducing saved experiments.
-
-## Installation and data preparation
-
-Run commands from the project root, using Python 3.9 or newer:
+Другой порт:
 
 ```bash
-python -m venv .venv
+PORT=3000 bash run-local.sh
+```
+
+## Запуск вручную — как в Cian-проекте
+
+Первичная настройка:
+
+```bash
+cd /mnt/d/datacon_2026/clinical-compass
+python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install -r requirements.txt
-mkdir -p data/raw
-# Download and extract events.csv into data/raw/ as described above.
-python -m scripts.run_eda
-# Check data loading/splitting without fitting recommendation models:
-python -m pytest -q tests/test_temporal_split.py
-# Optional train-only benchmark preflight; does not fit models:
-python -m scripts.run_experiments --mode dev --estimate-only
 ```
 
-After preparation, notebook 01 studies the raw dataset and split boundaries;
-02–03 tune/evaluate the base models and 04 handles learning to rank. To actually
-run the model experiments, use the separate commands in the benchmark section
-below; `python -m scripts.run_eda` alone never trains those models.
-
-Before publishing, `git ls-files -- data/` should return no tracked files and
-`git check-ignore data/raw/events.csv data/processed/train.csv` should identify
-both paths as ignored. If a Git repository already tracks data, use
-`git rm -r --cached data/`: it removes index entries while retaining local files.
-Do not force-add ignored dataset files or their archives.
-
-## Benchmark modes and reproduction checks
-
-| Mode | User cap | Item cap | Output location |
-|---|---:|---:|---|
-| `dev` (default) | 20,000 | 1,500 | `outputs/`; executed notebooks in `outputs/dev/notebooks/` |
-| `full` | 100,000 | 10,000 | `outputs/full/`, including separate executed notebooks |
-
-Both modes retain identical global temporal boundaries and the minimum of five
-train events. Sampling, catalog selection, and eligibility use train only;
-refitting before test uses train + validation. The original rank-training
-snapshot still uses all users with five events in its own early history
-(45,908 here), with its own history-selected catalog. Mode selection does not
-change this chronology. `full` means an expanded bounded benchmark, not all
-Retailrocket items or a cold-start evaluation.
+Каждый следующий запуск:
 
 ```bash
-# Train-only preflight: no validation/test access, no model fitting.
-python -m scripts.run_experiments --mode full --estimate-only
-# Execute the unchanged search spaces in notebooks 02, 03, 04.
-python -m scripts.run_experiments --mode dev
-# Repeat the same experiment and compare 15 result tables + selected parameters.
-python -m scripts.run_experiments --mode dev --verify-reproducibility
-python -m pytest -q
-# Expanded experiment, after reviewing the preflight resource allowances:
-python -m scripts.run_experiments --mode full
+cd /mnt/d/datacon_2026/clinical-compass
+source .venv/bin/activate
+python scripts/web_service.py --port 8000
 ```
 
-The guarded CLI is preferred for full. Interactive execution with
-`BENCHMARK_MODE=full` runs 02→03→04 without the CLI resource guard. The notebook code defaults to `dev`. Searches remain directly
-in notebooks; the runner only provides the matching Python kernel, mode,
-preflight, execution and reproducibility comparison. Notebook 01 and the raw
-chronological split do not depend on benchmark mode.
-
-The preflight on the supplied train data finds **57,811 eligible full users**,
-10,000 items and 189,770 nonzero user-item pairs versus dev's 24,543. ItemKNN's
-sum-of-squared-user-degrees work proxy grows **22.5×** (inner rank-training
-snapshot: **7.7×**); the conservative all-cohort scoring proxy grows **19.3×**.
-The rank-training candidate bound grows from 184,400 to 397,000 rows. The legacy dense
-worst-case ItemKNN allowance (CSR/LIL/copies, 80 bytes per item pair) was
-**7.45 GiB** in full versus 172 MiB in dev, plus roughly 388 MiB for candidate
-feature rows and additional model/data copies. These are conservative planning
-allowances, not measured peak RSS or elapsed-time predictions; sparsity may
-reduce actual memory substantially. Model-selection grids are unchanged.
-
-**Full execution is complete after the approved memory optimization.** ItemKNN now
-computes 128 rows of co-occurrence at a time, with direct top-k CSR storage,
-keeping the original scoring and tie handling. All six dev configurations
-matched the legacy similarities, recommendations and metrics exactly; see the
-[equivalence check](outputs/full/logs/itemknn_dev_equivalence.json). The updated
-workspace allowance is approximately **60 MiB** for full ItemKNN rather than the
-legacy dense planning allowance of 7.45 GiB. These are workspace estimates,
-not total experiment RSS measurements. Snapshot objects are released between
-stages; models, grids, eligibility and the full catalog were not reduced.
-
-The guarded full runner saves completed notebook checkpoints and skips them on
-resume. It reuses completed search/ablation tables and verifies reconstruction
-of the selected ranker before final evaluation. The first attempt stopped on
-swap growth, then continued under an explicit user override; both attempts and
-remaining emergency limits are recorded in the manifest. It reads canonical
-notebook code unchanged; source fingerprints protect completed checkpoints. The default command
-retains the conservative guard. `--allow-swap-growth` is an explicit override,
-not the default:
+Для автоматического перезапуска после изменений:
 
 ```bash
-python -m scripts.run_full
-# Only after explicitly accepting additional system-wide swap growth:
-python -m scripts.run_full --allow-swap-growth
-python -m scripts.summarize_full
+python scripts/web_service.py --port 8000 --reload
 ```
 
-The original stop decision remains in the logs as history; the current status
-and completed artifacts are described in [the full report](outputs/full/REPORT.md).
-Dev notebook runtimes and exact package versions are recorded in the
-[execution manifest](outputs/metrics/execution_manifest.json). Data, cohort,
-catalog and profile fingerprints are recorded in the
-[benchmark manifest](outputs/metrics/benchmark_manifest.json). Notebooks 03/04
-reject parameters from a different profile, train dataset or relevance protocol.
-A repeated dev run is checked in
-[reproducibility_check.json](outputs/metrics/reproducibility_check.json); timing
-is excluded and metric comparisons use rtol=1e−7 / atol=1e−9. Repeating the same
-final evaluation checks reproducibility, not independent generalization.
-
-Original research artifacts and executed notebooks are retained in
-[`outputs/archive/pre_binary_unification/`](outputs/archive/pre_binary_unification/PROTOCOL.md).
-Those historical 02/03 results used graded NDCG and the old candidate union
-label; they are provenance only and must not be merged into current comparisons.
-
-## Modeling and evaluation decisions
-
-- Events are ordered in UTC and split 70/15/15 by distinct timestamps. Tied
-  timestamps stay together. The saved boundaries are checked to be strictly
-  chronological; the test starts at 2015-08-25 22:39:44 UTC.
-- Event strengths for collaborative-model training are `view=1`,
-  `addtocart=3`, and `transaction=5`; repeated user-item events are summed.
-  All primary evaluation and validation selection use binary targets for
-  every model; training weights are separate from evaluation relevance.
-- Cohort eligibility (at least five train events), the deterministic sample
-  (seed 42), and top-1,500 item catalog are determined from train only.
-- ItemKNN and implicit ALS hyperparameters are selected by NDCG@10 on the
-  chronological validation split. CatBoostRanker uses a small validation-only
-  search and early stopping. The test period is loaded only after these choices
-  are fixed; final base models are refit on train + validation.
-- Every recommendation excludes items already in the user's available
-  pre-target history. Macro NDCG@10 is primary; Recall@10, Precision@10,
-  catalog Coverage@10, and cold-start diagnostics add complementary views.
-- ItemKNN uses cosine item co-occurrence with shrinkage. ALS is used only via
-  the library `implicit.als.AlternatingLeastSquares`. CatBoostRanker only
-  reorders the union of ItemKNN and implicit ALS candidates.
-- Cold-start users have no interaction history for personalization, and items
-  outside the train-selected catalog cannot enter this candidate set. A
-  production system would need popularity fallbacks and/or item metadata.
-
-## Two-stage ranking workflow
-
-```mermaid
-flowchart LR
-  H[Past interaction history] --> A[implicit ALS: top 100]
-  H --> K[ItemKNN: top 100]
-  A --> U[Deduplicated candidate union]
-  K --> U
-  U --> F[Leakage-safe user, item, and source features]
-  F --> R[CatBoostRanker]
-  R --> T[Top-10 unseen recommendations]
-```
-
-Ranker examples use an additional chronological split inside the original
-train period. User/item aggregates and candidate scores are computed from the
-history before each snapshot; future events are attached afterward as labels.
-The test model's candidate generators use train plus validation, never test.
-Model parameters, CatBoost version, time boundaries, and best validation
-iteration are saved in
-[`outputs/models/catboost_ranker_config.json`](outputs/models/catboost_ranker_config.json);
-the fitted model is
-[`outputs/models/catboost_ranker.cbm`](outputs/models/catboost_ranker.cbm).
-
-## Repository layout
+## Структура
 
 ```text
-data/raw/          # local source dataset (not committed)
-data/processed/    # generated temporal splits (not committed)
-notebooks/         # canonical source + research narrative for dev and full
-outputs/dev/notebooks/ # executed dev artifacts; never the source for future runs
-outputs/figures/   # saved EDA/model/error-analysis figures
-outputs/metrics/   # EDA, validation/test, tuning, ablation, and LTR tables
-outputs/models/    # fitted dev CatBoost ranker and experiment configuration
-outputs/full/      # completed expanded benchmark, separate figures/models/logs
-outputs/archive/   # preserved historical research, with its protocol caveats
-scripts/           # reproducible commands
-src/               # reusable data, models, tuning, and evaluation
-tests/             # temporal, recommendation, and ranking correctness tests
+app/main.py                 FastAPI-маршруты и проверка ролей
+app/db.py                   SQLite-схема и операции с данными
+scripts/web_service.py      локальный сервер с аргументами --host/--port
+requirements.txt            Python-зависимости
+run-local.sh                запуск одной командой
+data/clinical_compass.db    локальная база данных, создаётся автоматически
+dist/                       интерфейс сайта
 ```
+## Стандартизированные опросники
+
+Определения PHQ-9 и GAD-7 находятся в `config/scales.json`: вопросы, варианты ответов, пороги, правила алертинга и ссылки на источники. Подсчёт выполняется на сервере в `app/scales.py`, результаты сохраняются в SQLite.
+
+Проверка правил:
+
+```bash
+source .venv/bin/activate
+python -m unittest discover -s tests -v
+```
+
+Опросники являются скрининговыми инструментами. Балл не устанавливает диагноз и не изменяет терапию автоматически. Ненулевой ответ на пункт PHQ-9 о смерти или самоповреждении создаёт критический сигнал для врача и показывает пациенту инструкцию обратиться за неотложной помощью при непосредственной угрозе.
+
+## Терапия, безопасность и маршрутизация
+
+Пациент может отметить приём или пропуск назначенной терапии и описать нежелательную реакцию. Врач видит сводку приверженности за последние 30 отметок, историю реакций и автоматические сигналы:
+
+- **обязательно** — срочный запрос пациента, риск самоповреждения в PHQ-9 или выраженная нежелательная реакция;
+- **желательно** — высокий балл скрининга или пропуск терапии; это прозрачное правило прототипа для последующей клинической оценки.
+
+Сигнал не является назначением или диагнозом. Врач подтверждает или отклоняет маршрутизацию; пациент видит только подтверждённое решение. Правила находятся в `app/safety.py`, данные — в таблицах `medication_checkins` и `routing_signals`.
+
+Для изолированных проверок можно указать отдельную базу:
+
+```bash
+CLINICAL_COMPASS_DB=/tmp/clinical-compass-test.db python scripts/web_service.py --port 8013
+```
+
+
+## Связь пациента с врачом
+
+В разделе «Связь» работает постоянный диалог пациента с врачом. Сообщения хранятся в SQLite, имеют серверно определённого отправителя и отдельный статус прочтения для каждой роли. Врач видит количество непрочитанных сообщений по каждому пациенту, а пациент — индикатор нового ответа врача.
+
+Это асинхронный канал и не замена экстренной помощи: соответствующее предупреждение показывается над перепиской.
+
+
+## Структурированный план наблюдения
+
+Врач может добавить пациенту действие, категорию, срок и комментарий. Поддерживаются терапия, опросники, консультации и наблюдение. Пациент видит список в разделе «Мой план», отмечает выполнение и при необходимости возвращает действие в работу. Только врач может отменить назначенное действие.
+
+Шаблоны в форме помогают быстро создать повторный PHQ-9 или GAD-7, контрольную консультацию, ежедневный контроль терапии или контакт с врачом. Система не создаёт медицинские назначения автоматически.
+
+
+## Справочник терапии
+
+В карточке пациента врач может открыть справку по АВИАНДР® и выполнить чек-лист противопоказаний и взаимодействий. Правила находятся в `config/medications.json`, поэтому препараты и проверки можно добавлять без изменения интерфейса. Результат не является назначением и доступен только врачу.
+
+Источник сведений: инструкция препарата и регистрация ЛП-№(002445)-(РГ-RU); дата версии справочника фиксируется в конфигурации.
+
+
+## Профиль
+
+Раздел «Профиль» есть у обеих ролей. Пациент видит медкарту, сводку (возраст, приверженность, число опросников), быстрые переходы к лечению, контакты, экстренный контакт, настройки уведомлений (напоминание о самоотчёте со временем, сообщения врача, изменения плана), статус согласия на обработку данных и кнопку 112. Контакты редактируются на отдельном экране, переключатели сохраняются сразу. Данные лежат в таблице `patient_profiles`, API — `GET/PUT /api/profile` (только роль пациента, с серверной валидацией телефона, почты и времени). Экстренный контакт пациента показывается врачу в карточке пациента.
+
+Профиль врача показывает число пациентов, активные алерты, среднее время реакции, непрочитанные сообщения, сигналы маршрутизации и параметры эскалации из `config/alerting.json`.
+
+## База знаний врача
+
+Раздел «Знания» в навигации врача. В нём поиск (без учёта регистра, по всем словам запроса), фильтр по категориям (шкалы, терапия, протоколы, заметки врача) и два типа статей:
+
+- **системные** — PHQ-9, GAD-7, АВИАНДР®, «Сигналы и маршрутизация», «Критический алертинг». Они собираются в `app/knowledge.py` из `config/scales.json`, `config/medications.json`, `config/alerting.json` и порогов `app/safety.py`, поэтому всегда совпадают с правилами системы. Редактировать их нельзя: они меняются вместе с конфигурацией;
+- **статьи врача** — протоколы, памятки и заметки с тегами и ссылкой на источник. Хранятся в таблице `kb_articles`; в тексте пустая строка начинает абзац, строки с «- » становятся списком.
+
+При первом запуске в базу добавляются шаблоны протоколов из `config/kb_templates.json`: «Первичный приём», «Повторный контроль» и «Действия при критическом алерте». Порог эскалации в шаблоне подставляется из `config/alerting.json`. Шаблоны — обычные статьи врача: их можно править и удалять. Отметка о загрузке хранится в таблице `app_meta`, поэтому удалённый шаблон не появится снова после перезапуска. В тексте статей поддерживаются подзаголовки `## …`.
+
+В карточке пациента блок «Материалы по пациенту» подбирает статьи по его данным: пройденные шкалы, терапия, сигналы. API доступен только врачу: `GET /api/knowledge?q=&category=`, `GET/PUT/DELETE /api/knowledge/{id}`, `POST /api/knowledge`.
+
+
+
+
+
+
+
+## История наблюдения
+
+Единая временная лента объединяет результаты PHQ-9 и GAD-7, самоотчёты, отметки терапии и нежелательные реакции, подтверждённый план, действия пациента и решения по маршрутизации. События сортируются по времени и фильтруются по типу.
+
+Врач дополнительно видит обновления клинической сводки, ожидающие решения сигналы и критические алерты. Пациент не получает внутренние врачебные записи, алерты и неподтверждённую маршрутизацию. Лента формируется сервером функцией get_timeline в app/db.py и возвращается в составе карточки пациента.
+
+## Клиническая сводка и навигация врача
+
+В карточке пациента врач может сохранить структурированную сводку: причину обращения, жалобы, длительность симптомов, анамнез, сопутствующие состояния, текущие препараты, аллергии, рабочую гипотезу и отдельные признаки риска. Сводка доступна только врачу и не создаёт диагноз или назначение автоматически. Данные хранятся в таблице clinical_profiles; API — PUT /api/patients/{patient_id}/clinical-profile.
+
+Над карточкой расположены показатели последней шкалы, приверженности, решений и действий, а также быстрые переходы к динамике, плану, терапии, рискам и диалогу. На главном экране врача пациенты фильтруются по критическим состояниям, ожидающим решения сигналам, новым данным и стабильному состоянию.
+
+## Демонстрационные клинические сценарии
+
+При первом запуске версия 0.10 один раз добавляет четыре синтетические истории к интерактивному профилю пациента:
+
+- **стабильная динамика** — снижение GAD-7 и высокая приверженность;
+- **противопоказание** — беременность, автоматически отмеченная в чек-листе АВИАНДР®;
+- **тревожно-депрессивная симптоматика** — высокий PHQ-9 и GAD-7, сигнал «желательно»;
+- **критическое состояние** — ненулевой пункт 9 PHQ-9, срочный запрос, обязательная маршрутизация и алерт.
+
+Описание сценариев находится в config/demo_scenarios.json. Синтетические события создаёт app/scenarios.py; повторные запуски их не дублируют. В карточке врача показываются жалобы, контекст, результат рассмотрения терапии и короткая последовательность демонстрации. Интерактивные данные Анастасии не перезаписываются.
+
+## Дизайн и иллюстрации
+
+Интерфейс повторяет визуальный язык приложения МЕДСИ: лавандовая шапка с промо-плитками, белый лист со скруглением, серые плитки с объёмными иллюстрациями и сплошные иконки нижней навигации. Шрифт — Onest.
+
+Иллюстрации — SVG в `dist/assets/icons/`, их генерирует `python scripts/build_icons.py`. Чтобы заменить любую из них на PNG, положите файл с тем же именем в `dist/assets/medsi/`, например `heart.png` или `glass-chat.png`. Приложение подхватит его автоматически при загрузке. Имена: `heart`, `clipboard`, `chart`, `pill`, `chat`, `plan`, `doctor`, `shield`, `bell`, `user`, `phone`; с префиксом `glass-` — варианты для промо-плиток.
+
+## Запуск на Windows
+
+```powershell
+cd D:\datacon_2026\clinical-compass
+python -m pip install -r requirements.txt
+python scripts/web_service.py --port 8000
+```
+
+## Критический алертинг
+
+Обязательные сигналы создают отдельный алерт с точным временем срабатывания и журналом системных действий. Врач принимает алерт в работу, после чего сохраняется время реакции в секундах. Если реакции нет 15 минут, алерт получает статус эскалации дежурному врачу. Порог, интервал опроса и действия настраиваются в `config/alerting.json`.
+
+**Доставка врачу в реальном времени.** Открытый кабинет врача опрашивает `GET /api/alerts` каждые 3 секунды (`poll_seconds`), поэтому и эскалация проверяется не реже раза в 3 секунды. Новый алерт показывается поверх любого экрана: окно «Критический алерт · обязательно» со звуковым сигналом, кнопками «Принять в работу» и «Открыть карточку» и временем доставки. В момент показа интерфейс вызывает `POST /api/alerts/{id}/delivered`, и сервер сохраняет `delivered_at` и `delivery_seconds` — время от срабатывания до появления у врача. Сводка — в поле `delivery` ответа `/api/alerts`. Если алерт сработал, пока врач был не в сети, окно покажет его при входе с пометкой «сработал N мин назад».
+
+Замеры (локальный сервер, Windows 10, один процесс uvicorn):
+
+| Этап | Время |
+|---|---|
+| Срочный самоотчёт → алерт виден в API (сервер) | медиана 86 мс, максимум 105 мс |
+| Срочный самоотчёт → окно алерта в открытом кабинете врача (браузер, Playwright) | 2,9 с; `delivery_seconds` = 2,8 с |
+| Верхняя граница доставки | интервал опроса 3 с + серверная задержка ≈ 0,1 с |
+
+
+## Решение врача по терапии
+
+После чек-листа врач фиксирует одно из трёх решений: подтвердить терапию, отложить решение или не применять препарат. Для подтверждения обязательны зарегистрированное показание, доза, режим и длительность. Явное противопоказание блокирует подтверждение, а предупреждения требуют клинического обоснования.
+
+Пациент видит только подтверждённое или отменённое решение. Внутренние статусы «отложено» и «не применять» остаются в кабинете врача. Подтверждённая терапия показывается пациенту в разделе «Мой план», а все изменения входят в единую временную ленту. Решения хранятся в таблице `therapy_decisions`; API — `POST /api/patients/{patient_id}/therapy-decisions` и `PUT /api/therapy-decisions/{decision_id}/cancel`.
+
+
+## Детерминированные клинические рекомендации
+
+В карточке пациента врач получает единую сводку из последних PHQ-9/GAD-7, сигналов маршрутизации, признаков риска из клинической записи, решения по терапии, нежелательных явлений и приверженности. Каждое действие содержит приоритет, наблюдаемый факт, предлагаемый следующий шаг и ссылку на тип источника.
+
+Сводка строится прозрачными правилами в app/recommendations.py и доступна только врачу. Кнопка переноса заполняет черновик плана, но не сохраняет и не отправляет его: врач должен проверить текст и отдельно подтвердить план. Критические пункты намеренно не переносятся в плановый черновик.
+
+
+## Аудит базы знаний v2
+
+Пилотный архив хранится в `data/knowledge/kb_v2.zip`. Перед индексацией запустите:
+
+```bash
+python3 scripts/audit_kb.py \
+  --json-output docs/kb_v2_audit.json \
+  --markdown-output docs/KB_V2_AUDIT.md
+```
+
+Для CI доступен флаг `--strict`: команда завершится с кодом 1, пока остаются ошибки или клинические блокеры. Текущая версия разрешена только для экспериментального поиска врача. Выдача пациенту и автоматические клинические решения заблокированы до назначения аудитории чанкам, медицинского утверждения и прохождения eval/safety-проверок.
+
+
+### Нормализованная KB v2.1
+
+Безопасная врачебная подвыборка собирается воспроизводимо:
+
+```bash
+python3 scripts/normalize_kb.py --zip
+python3 scripts/audit_kb.py data/knowledge/kb_v2_1_doctor \
+  --json-output docs/kb_v2_1_audit.json \
+  --markdown-output docs/KB_V2_1_AUDIT.md
+```
+
+Результат находится в `data/knowledge/kb_v2_1_doctor/`, архив — `data/knowledge/kb_v2_1_doctor.zip`. Исключённые записи сохраняются в `quarantine/exclusions.jsonl` с причиной исключения.
+
+
+## Полная KB v2.2 и локальный RAG-поиск для врача
+
+В версии 0.14.0 собран полный врачебный корпус data/knowledge/kb_v2_2_complete_doctor/: 247 поисковых чанков из всех содержательных клинических записей исходного пакета. Endpoint POST /api/rag/search доступен только врачу и возвращает фрагменты с цитатами. LLM на этом этапе не вызывается.
+
+~~~bash
+python3 scripts/build_complete_kb.py --zip
+python3 scripts/evaluate_retrieval.py
+~~~
+
+Текущий результат Top-10: полностью пройдены 20 из 20 сценариев, найдены 50 из 50 ожидаемых ссылок. Неполные записи доступны для справочного поиска, но исключены из автоматических решений. Пациентский RAG остаётся закрыт до подготовки отдельного пациентского корпуса.
+
+Описание: docs/KB_V2_2_COMPLETE.md, docs/RAG_RETRIEVAL.md, docs/RETRIEVAL_EVAL_V2_2.md.
+
+## Врачебный RAG-помощник через OpenRouter
+
+В версии 0.15.1 экран «База знаний» дополнен ассистентом врача. Локальный поиск выбирает фрагменты KB v2.2, после чего OpenRouter формирует ответ с нумерованными ссылками. Endpoint POST /api/rag/answer и статус GET /api/rag/status доступны только роли врача.
+
+~~~bash
+cp .env.example .env
+# добавьте OPENROUTER_API_KEY в .env
+bash run-local.sh
+~~~
+
+Ключ не передаётся браузеру и исключён из Git. Текущий этап предназначен для общих вопросов по базе знаний: персональные данные пациента в запрос вводить нельзя. Подробная настройка находится в docs/OPENROUTER_RAG.md.
+
+## Пациентский помощник
+
+В версии 0.16.0 добавлен отдельный помощник пациента на Qwen. Он использует изолированный корпус data/knowledge/kb_v2_3_patient/ и не имеет доступа к врачебным протоколам. Кризисные сообщения и вопросы об изменении терапии обрабатываются локальными правилами до вызова LLM.
+
+~~~bash
+python3 scripts/build_patient_kb.py
+bash run-local.sh
+~~~
+
+Экран открывается кнопкой «Умный помощник» на главной пациента. Корпус имеет статус прототипа и требует отдельного клинического утверждения перед работой с реальными пациентами. Подробнее: docs/PATIENT_ASSISTANT.md.
+
+## AI-сводка клинического случая
+
+В версии 0.17.0 в карточке пациента появилась AI-сводка для врача. Сервер обезличивает данные карты, добавляет найденные фрагменты врачебной KB v2.2 и получает через OpenRouter структурированный черновик с динамикой, рисками, вопросами для проверки и недостающими данными. Результат не сохраняется и не изменяет лечение автоматически. Подробнее: `docs/AI_CLINICAL_SUMMARY.md`.
+
+
+## Подтверждение AI-сводки врачом
+
+В версии 0.18.0 AI-сводку можно отредактировать и явно подтвердить. В историю пациента попадает только проверенная версия; исходный черновик и сведения о модели и базе сохраняются для аудита. Пациенту внутренняя запись не показывается.
+
+
+## Контрольный сценарий MVP
+
+Основной путь пациента и врача зафиксирован автоматическим интеграционным тестом на отдельной временной базе. Команда проверки и ручной сценарий демонстрации находятся в docs/MVP_DEMO_FLOW.md.
+
+
+## Контекстный помощник врача
+
+В версии 0.19.0 в карточке пациента появился помощник врача по конкретному случаю. Он использует обезличенные данные открытого пациента и врачебную KB v2.2, разделяет факты карты, сведения источников и вопросы для врачебной проверки. Ответ не сохраняется и не меняет клинические решения. Подробнее: docs/CASE_ASSISTANT.md.
+
+
+## Quality gate врачебного RAG
+
+В версии 0.19.0 добавлен воспроизводимый eval из 30 синтетических сценариев. На рабочем Top-6 retrieval находит 50/50 ожидаемых источников; 30/30 live-ответов проходят автоматические проверки цитат и безопасных отказов. Автоматический результат не заменяет врачебную проверку. Подробнее: docs/RAG_QUALITY_EVAL.md.
+
+
+## Нейрон — ИИ-помощник
+
+Нейрон — лицо AI-помощника на обеих сторонах: пациентский чат, AI-сводка, помощник по случаю и ассистент базы знаний у врача.
+
+У пациента настроение Нейрона показывает, насколько регулярно он ведёт наблюдение за последние 7 дней: самоотчёты, отметки приёма терапии и опросник раз в 14 дней. Ответы и баллы на настроение не влияют. Честная отметка «пропустил приём» засчитывается наполовину, молчание не засчитывается совсем.
+
+| Состояние | Когда |
+|---|---|
+| Сияет | регулярность ≥ 80% |
+| Расцветает | ≥ 60% |
+| Уютно | ≥ 35% |
+| На связи | новый пациент или < 35% |
+| Задремал | 3+ дня без отметок |
+| Тревожно | 7+ дней без отметок или 3+ отмеченных пропуска терапии за неделю |
+
+Пороги, веса и тексты лежат в `config/neuron.json`, расчёт — в `app/neuron.py` (по существующим таблицам, без отдельного хранилища). Картинки — `dist/assets/neuron/`.
+
+API: `GET /api/neuron` (пациент), `GET /api/patients/{id}/neuron` (врач, вкладка «Действия» → «Вовлечённость в наблюдение»). Интерфейс — `dist/neuron-ui.js`, `dist/neuron.css`. Тесты — `tests/test_neuron.py`.
+
+## Опросник скрытых побочных эффектов (назначенный препарат, Авиандр®)
+
+Главная задача пациентской части — собирать самочувствие и необычные эффекты на фоне приёма нового препарата: то, что сложно заметить в клинических группах и о чём пациенты сами не рассказывают (цветные сны, эмоциональное притупление, интимная сфера). Карточка опросника стоит рядом с Нейроном и первой в его списке дел, перед самоотчётом. Заполняется раз в 2 недели, исходный опросник — до начала терапии, чтобы отличать новые ощущения от симптомов болезни.
+
+68 вопросов, как в бумажной версии:
+
+- **А–И** — 56 пунктов в 9 разделах (сон и сновидения; эмоции; внутреннее беспокойство и мышцы; внимание и память; тело; пищеварение и вес; интимная сфера; кожа, кровь, гормоны; пропуск доз и алкоголь), шкала «Нет / Немного / Заметно / Сильно» за последние 2 недели. Если что-то отмечено — «связано ли с лечением» и «появилось ли после начала лечения». В каждом разделе есть поле для свободного ответа и кнопка «Ничего из этого». Раздел «Интимная сфера» можно пропустить.
+- **К** — 7 признаков для срочной связи (Да / Нет).
+- **Л** — насколько отмеченное мешает жить, пропуски и изменение дозы, мысли о прекращении лечения, желание обсудить лично, и вопрос 68 — «что-то ещё необычное».
+
+Сигналы врачу: любой пункт раздела К — обязательный сигнал и уведомление; пункт «Сильно», «Очень сильно мешает жить» или мысли о прекращении — рекомендованный «обсудить переносимость»; пропуски или самостоятельное изменение дозы из-за ощущений — рекомендованный «уточнить приверженность».
+
+Вопросы и варианты — в `config/drug_survey.json`, логика — `app/drug_survey.py`, таблица `drug_reports`. API: `GET /api/drug-survey`, `POST /api/patients/1/drug-reports` (пациент), `GET /api/patients/{id}/drug-reports`, `GET /api/drug-insights` (врач — обезличенная сводка). Интерфейс — `dist/drug-survey-ui.js`, `dist/drug-survey.css`; у врача баннер на главной, блок во вкладке «Терапия» и экран сводки. Тесты — `tests/test_drug_survey.py`.
+
+## Вход и сессии
+
+Роль определяется только сессией. Логин и пароль проверяются на сервере: пароли хранятся как PBKDF2-SHA256 (200 000 итераций, соль), сессия — случайный токен на 12 часов, в базе хранится только его SHA-256 (таблицы `users`, `sessions`). Клиент передаёт токен в заголовке `Authorization: Bearer …`; подставить роль заголовком нельзя. Заголовок `X-Demo-Role` работает только в автотестах (переменная `CLINICAL_COMPASS_DEMO_HEADERS=1`).
+
+API: `POST /api/auth/login`, `GET /api/auth/me`, `POST /api/auth/logout`. Демо-учётные записи — в `config/users.json`, создаются при первом запуске. Перед реальным использованием их нужно заменить, а сервер запускать за HTTPS.
+
+Экран входа начинается с короткой заставки Нейрона: он появляется в центре, здоровается и садится над карточкой входа. Кнопки «Врач» и «Пациент» входят в демо-учётные записи одним нажатием, кнопка «Выйти» в шапке завершает сессию. Файлы: `app/auth.py`, `dist/auth-boot.js` (токен для всех запросов `/api`), `dist/auth-ui.js`, `dist/auth.css`.
+
+## Реклама препарата
+
+Блок «Авиандр®» показывается только в кабинете врача, в боковой панели, с пометками «Реклама» и «Информация для специалистов здравоохранения»: реклама рецептурных препаратов допускается только для специалистов (ФЗ «О рекламе», ст. 24). Файл — `dist/promo-ui.js`.
+
+## Источники
+
+| Что | Источник |
+|---|---|
+| Авиандр®: показания, противопоказания, дозирование | Инструкция по медицинскому применению в ГРЛС Минздрава России, ЛП-№(002445)-(РГ-RU) от 31.05.2023 — https://grls.rosminzdrav.ru/GRLS.aspx (поиск по торговому наименованию) |
+| Генерализованное тревожное расстройство | Клинические рекомендации Минздрава России, ID 457, 2024 — https://cr.minzdrav.gov.ru/view-cr/457_3 |
+| Депрессивный эпизод, рекуррентное депрессивное расстройство | Клинические рекомендации Минздрава России, ID 301, 2024 — https://cr.minzdrav.gov.ru/view-cr/301_3 |
+| PHQ-9, русская версия | валидация: https://doi.org/10.17759/cpse.2023120406 |
+| GAD-7, русская версия | валидация: https://doi.org/10.17759/cpp.2023310402 |
+
+Ссылки хранятся в `config/medications.json` и `config/scales.json` и показываются в справочнике терапии, базе знаний и карточках опросников.
+
+## Резервное копирование
+
+```bash
+python scripts/backup_db.py                  # снимок в data/backups/, хранятся 14 последних
+python scripts/backup_db.py --keep 48
+python scripts/backup_db.py --restore data/backups/clinical_compass-20261027-120000.db
+```
+
+Снимок делается через sqlite3 backup API без остановки сервера и проверяется `PRAGMA integrity_check`. Перед восстановлением текущая база сохраняется рядом (`*.before-restore-*.db`). База работает в режиме WAL с `synchronous=NORMAL`: чтение не блокируется записью, при падении процесса подтверждённые записи сохраняются.
+
+Замер на демо-базе (320 КБ): снимок 0,02 с, восстановление 0,01 с. При запуске по расписанию (cron или Планировщик заданий Windows, например каждые 15 минут) максимальная потеря данных при отказе диска (RPO) равна интервалу снимков, восстановление (RTO) — секунды плюс перезапуск сервера.
+
+## Нагрузочный прогон
+
+```bash
+python scripts/web_service.py --port 8765            # лучше на копии базы: CLINICAL_COMPASS_DB=...
+python scripts/load_test.py --users 10 25 50 --seconds 15
+```
+
+Виртуальные пользователи (1 врач на 4 пациентов) в цикле открывают главную, Нейрона, карточку пациента, алерты и отправляют самоотчёты. Результат на ноутбуке (Windows 10, один процесс uvicorn, SQLite WAL):
+
+| Пользователей одновременно | Запросов за 15 с | Запросов/с | p50, мс | p95, мс | p99, мс | Ошибки |
+|---|---|---|---|---|---|---|
+| 10 | 1811 | 120 | 41 | 294 | 424 | 0 |
+| 25 | 2177 | 142 | 82 | 555 | 727 | 0 |
+| 50 | 2152 | 140 | 233 | 892 | 1083 | 0 |
+
+Самые тяжёлые запросы при 50 пользователях: карточка пациента у врача с рекомендациями (медиана 907 мс) и `/api/state` (599 мс), остальные — 85–254 мс. Режим WAL поднял пропускную способность примерно на 50% (было 93 запроса/с). Дальнейшее масштабирование — несколько процессов uvicorn и PostgreSQL вместо SQLite.
+
+## Импорт истории болезни
+
+Во вкладке «Клиника и план» карточки пациента врач вставляет текст или загружает `.txt` / `.pdf` (до 5 МБ; кодировки UTF-8 и Windows-1251). Сервер извлекает:
+
+- поля клинической сводки: причина обращения, жалобы, длительность, анамнез, сопутствующие, препараты, аллергии, диагноз;
+- возраст (в том числе по дате рождения), пол, коды МКБ-10 (или код по названию диагноза с пометкой «проверьте»), баллы PHQ-9 и GAD-7 с проверкой диапазона;
+- признаки риска с учётом отрицаний («суицидальные мысли отрицает» — не риск, «не хочет жить» — риск), психотические признаки, статус беременности;
+- препараты с дозой и режимом, отменённые препараты и по ним — факторы чек-листа Авиандра (серотонинергические, ингибиторы CYP2D6, ИМАО ≤ 2 недель, седативные), а также СКФ < 60, эпилепсия, печёночная недостаточность, лактоза, алкоголь, вождение.
+
+Заголовки распознаются в любом порядке и оформлении: «Жалобы:», «ЖАЛОБЫ» отдельной строкой, «Ds:», «An. morbi», «1. Жалобы:», «## Диагноз», SOAP (S/O/A/P), таблица «Поле | Значение», а также сплошной текст без заголовков. Результат — черновик: врач отмечает нужные поля и нажимает «Перенести в клиническую сводку». Флаги риска при переносе только добавляются; факторы можно одной кнопкой отметить в чек-листе терапии. API: `POST /api/patients/{id}/history-import` (только врач, ничего не сохраняет). Правила — `app/history_import.py`.
+
+**Оценка (метрика «Обработка входных данных»).** Синтетические истории в разных шаблонах с эталонной разметкой: основной набор `data/evaluation/histories` (8 историй: структурированная, выписка с сокращениями, заголовки капсом, сплошной текст, SOAP, markdown в Windows-1251, направление терапевта, PDF) и отложенный `data/evaluation/histories_holdout` (5 историй: короткие сокращения, таблица, выписной эпикриз, текст без заголовков, острый риск).
+
+```bash
+python scripts/evaluate_history_import.py
+python scripts/evaluate_history_import.py --dir data/evaluation/histories_holdout
+```
+
+| Показатель | Основной набор | Отложенный, первый прогон | Отложенный после доработки |
+|---|---|---|---|
+| Возраст, пол, беременность, суицидальный риск, психоз | 100% | 88% | 100% |
+| Баллы шкал | 100% | 100% | 100% |
+| МКБ-10, препараты, факторы риска (F1) | 100% | 97% | 100% |
+| Текстовые поля | 100% | 89% | 100% |
+
+Время разбора — 1–6 мс на текст и около 200 мс на PDF. Честная оценка на новых данных — столбец «первый прогон»: правила дорабатывались на основном наборе, а после первого прогона отложенный набор тоже стал обучающим. Для следующей независимой проверки нужны новые истории, лучше обезличенные реальные. Тесты — `tests/test_history_import.py`.
+
+## Демо-стенд на своём сервере (Timeweb Cloud или любой VPS)
+
+Папка `deploy/`: `docker-compose.yml` (приложение + Caddy с бесплатным HTTPS от Let's Encrypt) и `setup.sh`. На чистом Ubuntu 22.04/24.04:
+
+```bash
+sudo apt-get update && sudo apt-get install -y git
+git clone https://x-access-token:<токен>@github.com/nastyaleksa04/clinical-compass.git /opt/clinical-compass
+sudo GITHUB_TOKEN=<токен> bash /opt/clinical-compass/deploy/setup.sh
+```
+
+Скрипт ставит Docker, собирает приложение и запускает его по адресу `https://<IP>.sslip.io` (или по своему домену: `DOMAIN=compass.example.ru`). База хранится в томе `cc-data` и переживает обновления, каждую ночь в 04:00 по Москве демо-данные возвращаются к исходным. Ключ OpenRouter — в `/opt/clinical-compass/deploy/app.env`, затем `docker compose up -d` в папке `deploy`. Обновить стенд после push в GitHub — снова запустить `setup.sh`.
+
+## Демо-стенд в GitHub Codespaces
+
+В репозитории есть `.devcontainer`: GitHub сам ставит зависимости и шрифты и запускает сервер со свежими демо-данными.
+
+1. На странице репозитория: **Code → Codespaces → Create codespace on main**. Первый запуск — 2–4 минуты.
+2. Внизу редактора вкладка **Ports** → строка порта **8000** → правой кнопкой **Port Visibility → Public**.
+3. Ссылка из колонки **Forwarded Address** (`https://…-8000.app.github.dev`) открывается у любого человека.
+
+Codespace засыпает после 30 минут без активности (можно увеличить до 240 минут: GitHub → Settings → Codespaces → Default idle timeout). Перед показом откройте его снова: сервер перезапустится сам, ссылка та же. Ключ OpenRouter: GitHub → Settings → Codespaces → **Secrets** → `OPENROUTER_API_KEY` с доступом к этому репозиторию. Лог сервера — `/tmp/clinical-compass.log`.
+
+## Публичный демо-стенд (Amvera или любой хостинг с Docker)
+
+В репозитории есть `Dockerfile` (Python 3.11, шрифты DejaVu для кириллицы в PDF) и `amvera.yml` (порт 8000, постоянное хранилище `/data`). Внутри контейнера:
+
+- база лежит в `/data/clinical_compass.db` и переживает перезапуск и пересборку;
+- при первом запуске сервер сам создаёт пользователей, сценарии и живые демо-данные;
+- каждую ночь в 04:00 по Москве база возвращается к исходному состоянию с датами «на сегодня» (`CLINICAL_COMPASS_DEMO_RESET_AT`, пустое значение отключает сброс);
+- на экране входа предупреждение: данные синтетические, реальные персональные данные вводить нельзя.
+
+Переменные окружения (задаются в настройках хостинга, ключ — как секрет):
+
+| Переменная | Зачем |
+|---|---|
+| `OPENROUTER_API_KEY` | ответы ИИ-помощника Нейрона; без ключа остальное работает |
+| `OPENROUTER_SITE_URL` | адрес стенда, например `https://clinical-compass.amvera.io` |
+| `OPENROUTER_MODEL` | основная модель (по умолчанию `qwen/qwen3.8-flash`) |
+| `OPENROUTER_FALLBACK_MODELS` | запасные модели через запятую; при ошибках 429/502/503 запрос сначала повторяется дважды с паузой, а OpenRouter переключается на запасные модели |
+| `CLINICAL_COMPASS_DEMO_RESET_AT` | время ночного сброса, по умолчанию `04:00` |
+
+Локальная проверка образа: `docker build -t clinical-compass . && docker run -p 8000:8000 -v cc-data:/data clinical-compass`.
+
+## Демо-данные для показа
+
+При запуске `scripts/web_service.py` в базу один раз добавляются «живые» данные: 2–3 недели наблюдения у каждого синтетического пациента — самоотчёты с комментариями, отметки приёма (включая честно отмеченные пропуски и лёгкие нежелательные реакции), PHQ-9 и GAD-7 в динамике, анкеты о препарате, план, задачи и переписка с врачом. Логика — `app/demo_life.py`; отключить — `CLINICAL_COMPASS_DEMO_DATA=0`.
+
+Даты отсчитываются от момента заполнения. В день показа остановите сервер и пересоздайте базу — текущая сохранится в `data/backups/`:
+
+```bash
+bash run-local.sh --fresh-demo                      # Ubuntu / WSL: пересоздать демо-базу и запустить сервер
+python scripts/web_service.py --port 8000 --fresh-demo   # то же вручную / на Windows
+```
+
+Без `--fresh-demo` сервер использует уже созданную базу, и изменения демо-данных в коде в ней не появятся.
+
+| Вход | Пароль | Пациент | Что показывает |
+|---|---|---|---|
+| `doctor` | `doctor2026` | Елена Крылова, врач | алерт, сигналы, новые сообщения, сводка по препарату |
+| `patient` | `patient2026` | Анастасия, 22 | ГТР (F41.1) — показание АВИАНДР® по инструкции; 4 недели терапии: GAD-7 16 → 12 → 14 (неделя сдачи проекта) → 9 → 6, PHQ-9 7 → 6 → 8 → 5 → 4; исходный опросник побочных эффектов до терапии, через 2 недели — цветные сны; очередной опросник ждёт заполнения — Нейрон «расцветает» (75%), после опросника сияет |
+| `sokolova` | `patient2026` | Мария, 34 | стабильное улучшение, вопросы про кофе и отпуск |
+| `lebedeva` | `patient2026` | Ольга, 29 | беременность: Авиандр противопоказан, план КПТ |
+| `morozov` | `patient2026` | Илья, 41 | ухудшение на терапии, снижение влечения → сигнал «желательно» |
+| `orlova` | `patient2026` | Елена, 30 | пропуски терапии, кризис, критический алерт, Нейрону тревожно |
+
+Каждый пациент входит в свой кабинет и видит только свои данные: идентификатор пациента берётся из сессии. Тесты — `tests/test_demo_life.py`.
