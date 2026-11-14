@@ -1,0 +1,3 @@
+contrast,users,delta,ci_low,ci_high,confidence,n_bootstrap,seed,metric
+CatBoost minus implicit ALS,1058,0.0128718257372342,0.0075880407880243,0.0185232744014011,0.95,5000,42,ndcg@10
+CatBoost minus ItemKNN,1058,0.0085603492795754,0.0028180502509892,0.0142431624711037,0.95,5000,42,ndcg@10

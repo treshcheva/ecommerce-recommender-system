@@ -1,0 +1,18 @@
+{
+  "mode": "dev",
+  "python": "3.9.12",
+  "packages": {
+    "numpy": "1.26.4",
+    "pandas": "2.3.3",
+    "scipy": "1.10.1",
+    "implicit": "0.7.3",
+    "catboost": "1.2.7",
+    "matplotlib": "3.9.4",
+    "nbclient": "0.5.13"
+  },
+  "notebook_seconds": {
+    "02_modeling": 17.942862917,
+    "03_evaluation": 7.906553875,
+    "04_learning_to_rank": 55.351146583
+  }
+}

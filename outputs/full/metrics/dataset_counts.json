@@ -1,0 +1,9 @@
+{
+  "cohort_users": 57811,
+  "catalog_items": 10000,
+  "train_events": 370990,
+  "validation_events": 13460,
+  "validation_evaluated_users": 1627,
+  "test_events": 7081,
+  "test_evaluated_users": 1058
+}

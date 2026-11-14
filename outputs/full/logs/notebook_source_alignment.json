@@ -1,0 +1,69 @@
+{
+  "status": "passed",
+  "models_executed": false,
+  "notebooks": [
+    {
+      "source": "notebooks/01_eda.ipynb",
+      "artifact": "outputs/dev/notebooks/01_eda.ipynb",
+      "code_cells": 5,
+      "source_code_sha256": "a564c67591692dd41c57d861872ccdad8a83d047f6347eec51f35d0e3dabcf39",
+      "code_exactly_equal": true,
+      "all_cell_sources_exactly_equal": true,
+      "historical_outputs_preserved": true
+    },
+    {
+      "source": "notebooks/02_modeling.ipynb",
+      "artifact": "outputs/dev/notebooks/02_modeling.ipynb",
+      "code_cells": 11,
+      "source_code_sha256": "a2590189fbbddd1c1ee7f18a141a18d4c8992f98d36ee90cb3ddcac28b358d0f",
+      "code_exactly_equal": true,
+      "all_cell_sources_exactly_equal": true,
+      "historical_outputs_preserved": true
+    },
+    {
+      "source": "notebooks/02_modeling.ipynb",
+      "artifact": "outputs/full/notebooks/02_modeling.ipynb",
+      "code_cells": 11,
+      "source_code_sha256": "a2590189fbbddd1c1ee7f18a141a18d4c8992f98d36ee90cb3ddcac28b358d0f",
+      "code_exactly_equal": true,
+      "all_cell_sources_exactly_equal": true,
+      "historical_outputs_preserved": true
+    },
+    {
+      "source": "notebooks/03_evaluation.ipynb",
+      "artifact": "outputs/dev/notebooks/03_evaluation.ipynb",
+      "code_cells": 5,
+      "source_code_sha256": "01e66e09533bf1164c64a8affd43b370b2e9ad02fd8f1c518526fcd418377355",
+      "code_exactly_equal": true,
+      "all_cell_sources_exactly_equal": true,
+      "historical_outputs_preserved": true
+    },
+    {
+      "source": "notebooks/03_evaluation.ipynb",
+      "artifact": "outputs/full/notebooks/03_evaluation.ipynb",
+      "code_cells": 5,
+      "source_code_sha256": "01e66e09533bf1164c64a8affd43b370b2e9ad02fd8f1c518526fcd418377355",
+      "code_exactly_equal": true,
+      "all_cell_sources_exactly_equal": true,
+      "historical_outputs_preserved": true
+    },
+    {
+      "source": "notebooks/04_learning_to_rank.ipynb",
+      "artifact": "outputs/dev/notebooks/04_learning_to_rank.ipynb",
+      "code_cells": 19,
+      "source_code_sha256": "a5bb5271f1f02d0b953fbc4f3134ead9eb5c7d90b706d136760c8d8635bd64bc",
+      "code_exactly_equal": true,
+      "all_cell_sources_exactly_equal": true,
+      "historical_outputs_preserved": true
+    },
+    {
+      "source": "notebooks/04_learning_to_rank.ipynb",
+      "artifact": "outputs/full/notebooks/04_learning_to_rank.ipynb",
+      "code_cells": 19,
+      "source_code_sha256": "a5bb5271f1f02d0b953fbc4f3134ead9eb5c7d90b706d136760c8d8635bd64bc",
+      "code_exactly_equal": true,
+      "all_cell_sources_exactly_equal": true,
+      "historical_outputs_preserved": true
+    }
+  ]
+}

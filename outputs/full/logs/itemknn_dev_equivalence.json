@@ -1,0 +1,47 @@
+{
+  "status": "passed",
+  "configurations": [
+    {
+      "neighbors": 25,
+      "shrinkage": 0.0,
+      "similarity_exact": true,
+      "recommendations_exact": true,
+      "dev_metrics_match": true
+    },
+    {
+      "neighbors": 25,
+      "shrinkage": 10.0,
+      "similarity_exact": true,
+      "recommendations_exact": true,
+      "dev_metrics_match": true
+    },
+    {
+      "neighbors": 50,
+      "shrinkage": 0.0,
+      "similarity_exact": true,
+      "recommendations_exact": true,
+      "dev_metrics_match": true
+    },
+    {
+      "neighbors": 50,
+      "shrinkage": 10.0,
+      "similarity_exact": true,
+      "recommendations_exact": true,
+      "dev_metrics_match": true
+    },
+    {
+      "neighbors": 100,
+      "shrinkage": 0.0,
+      "similarity_exact": true,
+      "recommendations_exact": true,
+      "dev_metrics_match": true
+    },
+    {
+      "neighbors": 100,
+      "shrinkage": 10.0,
+      "similarity_exact": true,
+      "recommendations_exact": true,
+      "dev_metrics_match": true
+    }
+  ]
+}

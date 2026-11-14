@@ -1,0 +1,54 @@
+{
+  "counts": {
+    "cohort_users": 57811,
+    "catalog_items": 10000,
+    "train_events": 370990,
+    "validation_events": 13460,
+    "validation_evaluated_users": 1627,
+    "test_events": 7081,
+    "test_evaluated_users": 1058
+  },
+  "notebook_seconds": {
+    "02_modeling": 172.70303483299998,
+    "03_evaluation": 24.254366750000003,
+    "04_learning_to_rank": 171.579392375
+  },
+  "total_successful_notebook_seconds": 368.536793958,
+  "sampled_runner_and_kernel_peak_rss_gib": 1.102996826171875,
+  "sampled_active_runner_seconds_including_attempts": 590.3346790840001,
+  "interrupted_04_seconds_at_stop": 214.09125820900002,
+  "interruption": "First 04 attempt stopped at swap growth >0.25 GiB. User explicitly authorized continuation without that swap threshold; only selected CatBoost was reconstructed, cached search/ablations reused.",
+  "rss_definition": "250 ms sampled process-tree RSS sum; shared pages may be double counted; not exact OS high-water mark.",
+  "catboost_test_contrasts": [
+    {
+      "contrast": "CatBoost minus implicit ALS",
+      "users": 1058,
+      "delta": 0.0128718257372342,
+      "ci_low": 0.0075880407880243,
+      "ci_high": 0.0185232744014011,
+      "confidence": 0.95,
+      "n_bootstrap": 5000,
+      "seed": 42,
+      "metric": "ndcg@10"
+    },
+    {
+      "contrast": "CatBoost minus ItemKNN",
+      "users": 1058,
+      "delta": 0.0085603492795754,
+      "ci_low": 0.0028180502509892,
+      "ci_high": 0.0142431624711037,
+      "confidence": 0.95,
+      "n_bootstrap": 5000,
+      "seed": 42,
+      "metric": "ndcg@10"
+    }
+  ],
+  "all_figures_dpi": 300,
+  "dev_artifacts_unchanged": true,
+  "limitations": [
+    "Dev/full use different cohorts and catalogs: raw score differences are not a controlled model improvement.",
+    "Binary implicit events include views, not only purchases; only known eligible users/new catalog targets are evaluated.",
+    "Single temporal split and training seed; percentile user bootstrap is conditional on fixed models and ignores shared-item dependencies.",
+    "Validation search/early stopping/ablations share validation and produce optimistic diagnostic intervals; intervals are not multiplicity adjusted."
+  ]
+}

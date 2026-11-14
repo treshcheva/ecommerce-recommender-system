@@ -1,0 +1,27 @@
+{
+  "status": "not_started_resource_risk",
+  "training_started": false,
+  "physical_ram_gib": 8,
+  "logical_cpus": 8,
+  "load_averages": [
+    1.98,
+    2.34,
+    2.56
+  ],
+  "swap_total_mib": 2048,
+  "swap_used_mib": 1535.31,
+  "swap_free_mib": 512.69,
+  "memory_pressure_free_percentage": 42,
+  "memory_pressure_free_percentage_note": "macOS memory_pressure indicator, not directly available physical RAM",
+  "compressor_occupied_pages": 194540,
+  "page_size_bytes": 16384,
+  "disk_available_gib_rounded": 13,
+  "disk_used_percentage": 94,
+  "itemknn_conservative_allowance_gib": 7.450580596923828,
+  "allowance_note": "Planning bound for intermediate matrices only, not a measured peak; excludes other live objects and OS.",
+  "reason": "Conservative ItemKNN allowance nearly equals total RAM; system already uses compression and swap. User explicitly requires consent before optimization or benchmark reduction.",
+  "completed_notebooks": [],
+  "experiment_peak_ram_gib": null,
+  "experiment_seconds": null,
+  "next_step": "Await user choice: memory optimization with same benchmark/models/grids; higher-RAM host; or smaller benchmark."
+}

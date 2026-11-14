@@ -1,0 +1,17 @@
+{
+  "event_rows": 2756101,
+  "unique_visitors": 1407580,
+  "unique_items": 235061,
+  "event_time_start_utc": "2015-05-03T03:00:04.384000+00:00",
+  "event_time_end_utc": "2015-09-18T02:59:47.788000+00:00",
+  "event_counts": {
+    "addtocart": 69332,
+    "transaction": 22457,
+    "view": 2664312
+  },
+  "events_per_visitor": {
+    "median": 1.0,
+    "p90": 3.0,
+    "max": 7757
+  }
+}

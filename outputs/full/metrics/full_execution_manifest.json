@@ -1,0 +1,117 @@
+{
+  "mode": "full",
+  "completed": {
+    "02_modeling": {
+      "seconds": 172.70303483299998,
+      "sampled_process_tree_peak_rss_gib": 1.009033203125,
+      "notebook_sha256": "5dbc5179325130a07f30fab76e938a122a4730a0ea529383057cf241ab95e76e",
+      "notebook_sha256_before_source_unification": "12b4d08c8b98144eae9b6d1cf93169585c93c1a33a60321b0b28658c42210ca7",
+      "source_code_sha256": "a2590189fbbddd1c1ee7f18a141a18d4c8992f98d36ee90cb3ddcac28b358d0f"
+    },
+    "03_evaluation": {
+      "seconds": 24.254366750000003,
+      "sampled_process_tree_peak_rss_gib": 0.9878387451171875,
+      "notebook_sha256": "067739685b5f927b164d607d549ae60c7ff035aaa2f2ddeec0170be7ecace98b",
+      "notebook_sha256_before_source_unification": "38b32b7fe1719d00a0c8e303f0bbaf2c600be7a221084d524310d1041ad98c54",
+      "source_code_sha256": "01e66e09533bf1164c64a8affd43b370b2e9ad02fd8f1c518526fcd418377355"
+    },
+    "04_learning_to_rank": {
+      "seconds": 171.579392375,
+      "sampled_process_tree_peak_rss_gib": 1.064208984375,
+      "notebook_sha256": "d975da86ab4168471a5621540b8b102748a0153596df293e1371e102f1623e88",
+      "notebook_sha256_before_source_unification": "395809301110c36508fc353ba98abd78be87979068b433e055b2efaff45266cc",
+      "source_code_sha256": "a5bb5271f1f02d0b953fbc4f3134ead9eb5c7d90b706d136760c8d8635bd64bc"
+    }
+  },
+  "attempts": [
+    {
+      "initial_resources": {
+        "ram_total_gib": 8.0,
+        "ram_available_gib": 1.74322509765625,
+        "swap_used_gib": 1.45245361328125,
+        "disk_free_gib": 12.774227142333984,
+        "load_1m": 2.60498046875,
+        "logical_cpus": 8
+      },
+      "status": "stopped",
+      "error": "Swap grew by more than 0.25 GiB",
+      "resources": {
+        "initial": {
+          "ram_total_gib": 8.0,
+          "ram_available_gib": 1.74322509765625,
+          "swap_used_gib": 1.45245361328125,
+          "disk_free_gib": 12.774227142333984,
+          "load_1m": 2.60498046875,
+          "logical_cpus": 8
+        },
+        "limits": {
+          "max_rss_gib": 1.25,
+          "min_available_gib": 0.5,
+          "max_swap_growth_gib": 0.25,
+          "max_stage_seconds": 1200
+        },
+        "sample_period_seconds": 0.25,
+        "sampled_rss_peak_gib_by_stage": {
+          "preflight": 0.7891693115234375,
+          "02_modeling": 1.009033203125,
+          "03_evaluation": 0.9878387451171875,
+          "04_learning_to_rank": 1.102996826171875
+        },
+        "stop_reason": "Swap grew by more than 0.25 GiB",
+        "rss_definition": "Sampled sum of runner and descendant RSS; includes shared-page double counting."
+      }
+    },
+    {
+      "initial_resources": {
+        "ram_total_gib": 8.0,
+        "ram_available_gib": 1.8877410888671875,
+        "swap_used_gib": 1.69183349609375,
+        "disk_free_gib": 12.76858901977539,
+        "load_1m": 1.73876953125,
+        "logical_cpus": 8
+      },
+      "status": "completed",
+      "user_authorized_swap_limit_override": true,
+      "resources": {
+        "initial": {
+          "ram_total_gib": 8.0,
+          "ram_available_gib": 1.8877410888671875,
+          "swap_used_gib": 1.69183349609375,
+          "disk_free_gib": 12.76858901977539,
+          "load_1m": 1.73876953125,
+          "logical_cpus": 8
+        },
+        "limits": {
+          "max_rss_gib": 1.75,
+          "min_available_gib": 0.25,
+          "max_swap_growth_gib": null,
+          "max_stage_seconds": 1200
+        },
+        "sample_period_seconds": 0.25,
+        "sampled_rss_peak_gib_by_stage": {
+          "preflight": 0.7994384765625,
+          "04_learning_to_rank": 1.064208984375
+        },
+        "stop_reason": null,
+        "rss_definition": "Sampled sum of runner and descendant RSS; includes shared-page double counting."
+      }
+    }
+  ],
+  "packages": {
+    "numpy": "1.26.4",
+    "pandas": "2.3.3",
+    "scipy": "1.10.1",
+    "implicit": "0.7.3",
+    "catboost": "1.2.7",
+    "matplotlib": "3.9.4",
+    "nbclient": "0.5.13",
+    "psutil": "5.8.0"
+  },
+  "dev_artifacts_unchanged": true,
+  "postprocessing": "Added data-derived full conclusions; exported figures at 300 dpi; dev untouched.",
+  "notebook_source_unification": {
+    "models_executed": false,
+    "original_versions": "outputs/full/logs/source_unification_before",
+    "note": "Historical execution records and all outputs preserved; artifact sources synchronized with canonical notebooks. This is not a repeated experiment."
+  }
+}

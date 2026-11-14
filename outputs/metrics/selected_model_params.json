@@ -1,0 +1,44 @@
+{
+  "selection_metric": "ndcg@10",
+  "relevance_mode": "binary",
+  "benchmark": {
+    "config": {
+      "mode": "dev",
+      "max_users": 20000,
+      "max_items": 1500,
+      "min_history": 5,
+      "seed": 42,
+      "k": 10,
+      "candidates_per_model": 100,
+      "relevance_mode": "binary"
+    },
+    "train_sha256": "dec5513b7ce7f10314edac1e2b6de6d62425a2aaca48c72d8744bb49b09450a3",
+    "train_start": "2015-05-03 03:00:04.384000+00:00",
+    "train_end": "2015-08-02 23:45:04.466000+00:00",
+    "train_rows": 1929488,
+    "cohort_sha256": "e4cd6fea3994693cb4695a10d59d867dc0cae5673ff21d1bae171b4e0fd3cc3d",
+    "catalog_sha256": "14d3478b0c3375c20dceaee83a002bca5a81bd7efef1cc0d2b0443ea61b1c514",
+    "users": 20000,
+    "items": 1500
+  },
+  "random_seed": 42,
+  "validation_start": "2015-08-02 23:45:11.739000+00:00",
+  "itemknn": {
+    "parameters": {
+      "neighbors": 50,
+      "shrinkage": 10.0
+    },
+    "validation_ndcg@10": 0.06953860877411577
+  },
+  "implicit_als": {
+    "parameters": {
+      "factors": 64,
+      "regularization": 0.05,
+      "alpha": 10.0,
+      "iterations": 8,
+      "random_state": 42,
+      "num_threads": 1
+    },
+    "validation_ndcg@10": 0.08162415243038006
+  }
+}

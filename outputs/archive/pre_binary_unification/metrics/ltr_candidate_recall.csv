@@ -1,0 +1,7 @@
+generator,candidate_recall@100,users,split
+implicit ALS,0.2393655586454748,242,validation
+ItemKNN,0.2139936149053258,242,validation
+ItemKNN + implicit ALS (up to 200 unique),0.31592224259926666,242,validation
+implicit ALS,0.2177755696873344,148,test
+ItemKNN,0.18576444091149974,148,test
+ItemKNN + implicit ALS (up to 200 unique),0.27531266560678325,148,test

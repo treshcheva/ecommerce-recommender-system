@@ -1,0 +1,30 @@
+{
+  "comparison": [
+    {
+      "notebook": "01_eda.ipynb",
+      "has_full_counterpart": false,
+      "original_differing_code_cells": 0,
+      "models_executed": false
+    },
+    {
+      "notebook": "02_modeling.ipynb",
+      "has_full_counterpart": true,
+      "original_differing_code_cells": 5,
+      "models_executed": false
+    },
+    {
+      "notebook": "03_evaluation.ipynb",
+      "has_full_counterpart": true,
+      "original_differing_code_cells": 2,
+      "models_executed": false
+    },
+    {
+      "notebook": "04_learning_to_rank.ipynb",
+      "has_full_counterpart": true,
+      "original_differing_code_cells": 10,
+      "models_executed": false
+    }
+  ],
+  "original_versions": "outputs/full/logs/source_unification_before",
+  "models_executed": false
+}

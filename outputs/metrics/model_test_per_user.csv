@@ -1,0 +1,593 @@
+user_id,ndcg@10,recall@10,precision@10,relevant_items,hits,model
+17939,0.0,0.0,0.0,1,0,Global Popularity
+28995,0.0,0.0,0.0,1,0,Global Popularity
+38102,0.0,0.0,0.0,1,0,Global Popularity
+42896,0.0,0.0,0.0,1,0,Global Popularity
+49384,0.0,0.0,0.0,1,0,Global Popularity
+61715,0.0,0.0,0.0,2,0,Global Popularity
+106649,0.0,0.0,0.0,1,0,Global Popularity
+108759,0.0,0.0,0.0,2,0,Global Popularity
+121975,0.0,0.0,0.0,1,0,Global Popularity
+141989,0.0,0.0,0.0,1,0,Global Popularity
+142237,0.0,0.0,0.0,1,0,Global Popularity
+142581,0.0,0.0,0.0,1,0,Global Popularity
+144527,0.0,0.0,0.0,1,0,Global Popularity
+165401,0.0,0.0,0.0,1,0,Global Popularity
+175890,0.0,0.0,0.0,1,0,Global Popularity
+196209,0.0,0.0,0.0,1,0,Global Popularity
+198153,0.0,0.0,0.0,4,0,Global Popularity
+201720,0.0,0.0,0.0,1,0,Global Popularity
+207113,0.0,0.0,0.0,2,0,Global Popularity
+219759,0.0,0.0,0.0,1,0,Global Popularity
+225106,0.0,0.0,0.0,1,0,Global Popularity
+229157,0.38685280723454163,0.5,0.1,2,1,Global Popularity
+234313,0.0,0.0,0.0,1,0,Global Popularity
+244076,0.0,0.0,0.0,1,0,Global Popularity
+246506,0.0,0.0,0.0,1,0,Global Popularity
+247633,0.0,0.0,0.0,1,0,Global Popularity
+262768,0.0,0.0,0.0,1,0,Global Popularity
+271331,0.0,0.0,0.0,1,0,Global Popularity
+272741,0.0,0.0,0.0,2,0,Global Popularity
+274981,0.0,0.0,0.0,1,0,Global Popularity
+283803,0.0,0.0,0.0,1,0,Global Popularity
+284741,0.0,0.0,0.0,1,0,Global Popularity
+292557,0.0,0.0,0.0,1,0,Global Popularity
+295158,0.0,0.0,0.0,2,0,Global Popularity
+295384,0.0,0.0,0.0,3,0,Global Popularity
+303684,0.0,0.0,0.0,2,0,Global Popularity
+304981,0.0,0.0,0.0,1,0,Global Popularity
+306568,0.0,0.0,0.0,1,0,Global Popularity
+310759,0.0,0.0,0.0,6,0,Global Popularity
+316235,0.0,0.0,0.0,1,0,Global Popularity
+316850,0.06625422345438904,0.08333333333333333,0.1,12,1,Global Popularity
+333141,0.0,0.0,0.0,1,0,Global Popularity
+346556,0.0,0.0,0.0,1,0,Global Popularity
+349829,0.0,0.0,0.0,2,0,Global Popularity
+350050,0.0,0.0,0.0,1,0,Global Popularity
+354084,0.0,0.0,0.0,1,0,Global Popularity
+354242,0.0,0.0,0.0,1,0,Global Popularity
+372907,0.0,0.0,0.0,1,0,Global Popularity
+374363,0.0,0.0,0.0,1,0,Global Popularity
+400676,0.0,0.0,0.0,1,0,Global Popularity
+417477,0.0,0.0,0.0,1,0,Global Popularity
+430913,0.0,0.0,0.0,2,0,Global Popularity
+454812,0.0,0.0,0.0,1,0,Global Popularity
+491226,0.0,0.0,0.0,1,0,Global Popularity
+500130,0.0,0.0,0.0,1,0,Global Popularity
+528691,0.0,0.0,0.0,2,0,Global Popularity
+529585,0.0,0.0,0.0,1,0,Global Popularity
+529925,0.0,0.0,0.0,1,0,Global Popularity
+530559,0.0,0.0,0.0,34,0,Global Popularity
+541834,0.0,0.0,0.0,1,0,Global Popularity
+545014,0.0,0.0,0.0,1,0,Global Popularity
+566009,0.0,0.0,0.0,1,0,Global Popularity
+576870,0.3010299956639812,1.0,0.1,1,1,Global Popularity
+589890,0.0,0.0,0.0,4,0,Global Popularity
+596422,0.0,0.0,0.0,1,0,Global Popularity
+602957,0.0,0.0,0.0,1,0,Global Popularity
+608700,0.0,0.0,0.0,1,0,Global Popularity
+611065,0.0,0.0,0.0,1,0,Global Popularity
+621451,0.0,0.0,0.0,1,0,Global Popularity
+638482,0.0,0.0,0.0,3,0,Global Popularity
+642808,0.0,0.0,0.0,1,0,Global Popularity
+647049,0.0,0.0,0.0,1,0,Global Popularity
+652524,0.0,0.0,0.0,1,0,Global Popularity
+686800,0.0,0.0,0.0,1,0,Global Popularity
+687082,0.0,0.0,0.0,2,0,Global Popularity
+706937,0.0,0.0,0.0,1,0,Global Popularity
+711583,0.0,0.0,0.0,1,0,Global Popularity
+721593,0.0,0.0,0.0,1,0,Global Popularity
+729150,0.0,0.0,0.0,2,0,Global Popularity
+736179,0.0,0.0,0.0,2,0,Global Popularity
+741639,0.0,0.0,0.0,2,0,Global Popularity
+744904,0.0,0.0,0.0,1,0,Global Popularity
+750425,0.0,0.0,0.0,1,0,Global Popularity
+757972,0.0,0.0,0.0,1,0,Global Popularity
+763141,0.20438239758848611,0.5,0.1,2,1,Global Popularity
+770680,0.0,0.0,0.0,1,0,Global Popularity
+780298,0.0,0.0,0.0,1,0,Global Popularity
+798002,0.0,0.0,0.0,3,0,Global Popularity
+799331,0.0,0.0,0.0,1,0,Global Popularity
+799931,0.0,0.0,0.0,1,0,Global Popularity
+804475,0.0,0.0,0.0,1,0,Global Popularity
+805200,0.0,0.0,0.0,1,0,Global Popularity
+805630,0.0,0.0,0.0,1,0,Global Popularity
+827075,0.0,0.0,0.0,1,0,Global Popularity
+837756,0.0,0.0,0.0,1,0,Global Popularity
+854304,0.0,0.0,0.0,1,0,Global Popularity
+856874,0.6309297535714575,1.0,0.1,1,1,Global Popularity
+886905,0.0,0.0,0.0,3,0,Global Popularity
+892013,0.0,0.0,0.0,1,0,Global Popularity
+896066,0.0,0.0,0.0,6,0,Global Popularity
+921845,0.0,0.0,0.0,1,0,Global Popularity
+957186,0.0,0.0,0.0,2,0,Global Popularity
+957746,0.0,0.0,0.0,1,0,Global Popularity
+960773,0.0,0.0,0.0,1,0,Global Popularity
+962631,0.0,0.0,0.0,6,0,Global Popularity
+963348,0.0,0.0,0.0,1,0,Global Popularity
+971698,0.0,0.0,0.0,1,0,Global Popularity
+978575,0.0,0.0,0.0,1,0,Global Popularity
+989691,0.0,0.0,0.0,1,0,Global Popularity
+1015599,0.0,0.0,0.0,3,0,Global Popularity
+1042749,0.0,0.0,0.0,1,0,Global Popularity
+1046432,0.0,0.0,0.0,1,0,Global Popularity
+1053783,0.0,0.0,0.0,1,0,Global Popularity
+1094984,0.0,0.0,0.0,1,0,Global Popularity
+1102098,0.0,0.0,0.0,6,0,Global Popularity
+1104027,0.0,0.0,0.0,2,0,Global Popularity
+1109474,0.0,0.0,0.0,3,0,Global Popularity
+1126569,0.0,0.0,0.0,25,0,Global Popularity
+1133112,0.0,0.0,0.0,2,0,Global Popularity
+1155064,0.0,0.0,0.0,1,0,Global Popularity
+1163391,0.0,0.0,0.0,1,0,Global Popularity
+1185408,0.0,0.0,0.0,1,0,Global Popularity
+1188952,0.0,0.0,0.0,7,0,Global Popularity
+1202842,0.0,0.0,0.0,1,0,Global Popularity
+1204741,0.0,0.0,0.0,1,0,Global Popularity
+1211432,0.0,0.0,0.0,1,0,Global Popularity
+1245778,0.0,0.0,0.0,1,0,Global Popularity
+1248329,0.0,0.0,0.0,1,0,Global Popularity
+1254385,0.0,0.0,0.0,1,0,Global Popularity
+1254737,0.0,0.0,0.0,1,0,Global Popularity
+1271661,0.0,0.0,0.0,1,0,Global Popularity
+1273306,0.0,0.0,0.0,3,0,Global Popularity
+1321299,0.0,0.0,0.0,1,0,Global Popularity
+1324082,0.0,0.0,0.0,1,0,Global Popularity
+1327189,0.0,0.0,0.0,1,0,Global Popularity
+1336835,0.0,0.0,0.0,5,0,Global Popularity
+1349681,0.0,0.0,0.0,1,0,Global Popularity
+1350407,0.0,0.0,0.0,2,0,Global Popularity
+1357083,0.0,0.0,0.0,2,0,Global Popularity
+1358298,0.0,0.0,0.0,6,0,Global Popularity
+1379807,0.0,0.0,0.0,1,0,Global Popularity
+1391782,0.0,0.0,0.0,2,0,Global Popularity
+1392512,0.0,0.0,0.0,1,0,Global Popularity
+1393838,0.0,0.0,0.0,1,0,Global Popularity
+1394708,0.0,0.0,0.0,1,0,Global Popularity
+1399936,0.0,0.0,0.0,1,0,Global Popularity
+1403394,0.0,0.0,0.0,1,0,Global Popularity
+1406236,0.0,0.0,0.0,1,0,Global Popularity
+17939,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+28995,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+38102,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+42896,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+49384,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+61715,0.0,0.0,0.0,2,0,Recent Popularity (14d)
+106649,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+108759,0.0,0.0,0.0,2,0,Recent Popularity (14d)
+121975,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+141989,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+142237,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+142581,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+144527,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+165401,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+175890,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+196209,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+198153,0.0,0.0,0.0,4,0,Recent Popularity (14d)
+201720,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+207113,0.0,0.0,0.0,2,0,Recent Popularity (14d)
+219759,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+225106,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+229157,0.23719771276929622,0.5,0.1,2,1,Recent Popularity (14d)
+234313,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+244076,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+246506,1.0,1.0,0.1,1,1,Recent Popularity (14d)
+247633,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+262768,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+271331,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+272741,0.0,0.0,0.0,2,0,Recent Popularity (14d)
+274981,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+283803,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+284741,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+292557,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+295158,0.0,0.0,0.0,2,0,Recent Popularity (14d)
+295384,0.0,0.0,0.0,3,0,Recent Popularity (14d)
+303684,0.0,0.0,0.0,2,0,Recent Popularity (14d)
+304981,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+306568,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+310759,0.0,0.0,0.0,6,0,Recent Popularity (14d)
+316235,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+316850,0.09478836436955079,0.08333333333333333,0.1,12,1,Recent Popularity (14d)
+333141,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+346556,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+349829,0.0,0.0,0.0,2,0,Recent Popularity (14d)
+350050,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+354084,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+354242,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+372907,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+374363,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+400676,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+417477,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+430913,0.0,0.0,0.0,2,0,Recent Popularity (14d)
+454812,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+491226,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+500130,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+528691,0.0,0.0,0.0,2,0,Recent Popularity (14d)
+529585,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+529925,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+530559,0.0,0.0,0.0,34,0,Recent Popularity (14d)
+541834,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+545014,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+566009,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+576870,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+589890,0.0,0.0,0.0,4,0,Recent Popularity (14d)
+596422,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+602957,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+608700,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+611065,0.5,1.0,0.1,1,1,Recent Popularity (14d)
+621451,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+638482,0.0,0.0,0.0,3,0,Recent Popularity (14d)
+642808,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+647049,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+652524,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+686800,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+687082,0.0,0.0,0.0,2,0,Recent Popularity (14d)
+706937,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+711583,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+721593,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+729150,0.0,0.0,0.0,2,0,Recent Popularity (14d)
+736179,0.0,0.0,0.0,2,0,Recent Popularity (14d)
+741639,0.0,0.0,0.0,2,0,Recent Popularity (14d)
+744904,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+750425,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+757972,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+763141,0.0,0.0,0.0,2,0,Recent Popularity (14d)
+770680,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+780298,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+798002,0.0,0.0,0.0,3,0,Recent Popularity (14d)
+799331,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+799931,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+804475,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+805200,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+805630,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+827075,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+837756,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+854304,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+856874,0.43067655807339306,1.0,0.1,1,1,Recent Popularity (14d)
+886905,0.0,0.0,0.0,3,0,Recent Popularity (14d)
+892013,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+896066,0.19092086617893467,0.16666666666666666,0.1,6,1,Recent Popularity (14d)
+921845,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+957186,0.0,0.0,0.0,2,0,Recent Popularity (14d)
+957746,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+960773,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+962631,0.0,0.0,0.0,6,0,Recent Popularity (14d)
+963348,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+971698,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+978575,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+989691,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+1015599,0.0,0.0,0.0,3,0,Recent Popularity (14d)
+1042749,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+1046432,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+1053783,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+1094984,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+1102098,0.0,0.0,0.0,6,0,Recent Popularity (14d)
+1104027,0.0,0.0,0.0,2,0,Recent Popularity (14d)
+1109474,0.0,0.0,0.0,3,0,Recent Popularity (14d)
+1126569,0.0,0.0,0.0,25,0,Recent Popularity (14d)
+1133112,0.0,0.0,0.0,2,0,Recent Popularity (14d)
+1155064,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+1163391,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+1185408,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+1188952,0.0,0.0,0.0,7,0,Recent Popularity (14d)
+1202842,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+1204741,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+1211432,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+1245778,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+1248329,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+1254385,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+1254737,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+1271661,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+1273306,0.0,0.0,0.0,3,0,Recent Popularity (14d)
+1321299,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+1324082,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+1327189,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+1336835,0.0,0.0,0.0,5,0,Recent Popularity (14d)
+1349681,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+1350407,0.0,0.0,0.0,2,0,Recent Popularity (14d)
+1357083,0.0,0.0,0.0,2,0,Recent Popularity (14d)
+1358298,0.0,0.0,0.0,6,0,Recent Popularity (14d)
+1379807,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+1391782,0.0,0.0,0.0,2,0,Recent Popularity (14d)
+1392512,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+1393838,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+1394708,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+1399936,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+1403394,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+1406236,0.0,0.0,0.0,1,0,Recent Popularity (14d)
+17939,0.0,0.0,0.0,1,0,ItemKNN
+28995,0.0,0.0,0.0,1,0,ItemKNN
+38102,0.0,0.0,0.0,1,0,ItemKNN
+42896,0.6309297535714575,1.0,0.1,1,1,ItemKNN
+49384,0.0,0.0,0.0,1,0,ItemKNN
+61715,0.0,0.0,0.0,2,0,ItemKNN
+106649,0.0,0.0,0.0,1,0,ItemKNN
+108759,0.0,0.0,0.0,2,0,ItemKNN
+121975,0.38685280723454163,1.0,0.1,1,1,ItemKNN
+141989,0.0,0.0,0.0,1,0,ItemKNN
+142237,0.3562071871080222,1.0,0.1,1,1,ItemKNN
+142581,0.0,0.0,0.0,1,0,ItemKNN
+144527,0.0,0.0,0.0,1,0,ItemKNN
+165401,0.0,0.0,0.0,1,0,ItemKNN
+175890,0.0,0.0,0.0,1,0,ItemKNN
+196209,0.0,0.0,0.0,1,0,ItemKNN
+198153,0.0,0.0,0.0,4,0,ItemKNN
+201720,0.0,0.0,0.0,1,0,ItemKNN
+207113,0.0,0.0,0.0,2,0,ItemKNN
+219759,1.0,1.0,0.1,1,1,ItemKNN
+225106,0.43067655807339306,1.0,0.1,1,1,ItemKNN
+229157,0.6131471927654584,0.5,0.1,2,1,ItemKNN
+234313,0.0,0.0,0.0,1,0,ItemKNN
+244076,0.0,0.0,0.0,1,0,ItemKNN
+246506,0.0,0.0,0.0,1,0,ItemKNN
+247633,0.0,0.0,0.0,1,0,ItemKNN
+262768,0.0,0.0,0.0,1,0,ItemKNN
+271331,0.0,0.0,0.0,1,0,ItemKNN
+272741,0.0,0.0,0.0,2,0,ItemKNN
+274981,0.0,0.0,0.0,1,0,ItemKNN
+283803,0.0,0.0,0.0,1,0,ItemKNN
+284741,0.0,0.0,0.0,1,0,ItemKNN
+292557,0.0,0.0,0.0,1,0,ItemKNN
+295158,0.0,0.0,0.0,2,0,ItemKNN
+295384,0.0,0.0,0.0,3,0,ItemKNN
+303684,0.0,0.0,0.0,2,0,ItemKNN
+304981,0.0,0.0,0.0,1,0,ItemKNN
+306568,0.0,0.0,0.0,1,0,ItemKNN
+310759,0.0,0.0,0.0,6,0,ItemKNN
+316235,0.0,0.0,0.0,1,0,ItemKNN
+316850,0.0,0.0,0.0,12,0,ItemKNN
+333141,0.0,0.0,0.0,1,0,ItemKNN
+346556,0.0,0.0,0.0,1,0,ItemKNN
+349829,0.0,0.0,0.0,2,0,ItemKNN
+350050,0.0,0.0,0.0,1,0,ItemKNN
+354084,0.0,0.0,0.0,1,0,ItemKNN
+354242,0.6309297535714575,1.0,0.1,1,1,ItemKNN
+372907,0.0,0.0,0.0,1,0,ItemKNN
+374363,0.0,0.0,0.0,1,0,ItemKNN
+400676,0.0,0.0,0.0,1,0,ItemKNN
+417477,0.0,0.0,0.0,1,0,ItemKNN
+430913,0.17723928678404774,0.5,0.1,2,1,ItemKNN
+454812,0.0,0.0,0.0,1,0,ItemKNN
+491226,0.0,0.0,0.0,1,0,ItemKNN
+500130,0.0,0.0,0.0,1,0,ItemKNN
+528691,0.0,0.0,0.0,2,0,ItemKNN
+529585,0.0,0.0,0.0,1,0,ItemKNN
+529925,0.0,0.0,0.0,1,0,ItemKNN
+530559,0.0,0.0,0.0,34,0,ItemKNN
+541834,0.0,0.0,0.0,1,0,ItemKNN
+545014,0.0,0.0,0.0,1,0,ItemKNN
+566009,0.0,0.0,0.0,1,0,ItemKNN
+576870,1.0,1.0,0.1,1,1,ItemKNN
+589890,0.0,0.0,0.0,4,0,ItemKNN
+596422,0.0,0.0,0.0,1,0,ItemKNN
+602957,0.0,0.0,0.0,1,0,ItemKNN
+608700,0.0,0.0,0.0,1,0,ItemKNN
+611065,0.0,0.0,0.0,1,0,ItemKNN
+621451,0.6309297535714575,1.0,0.1,1,1,ItemKNN
+638482,0.0,0.0,0.0,3,0,ItemKNN
+642808,0.0,0.0,0.0,1,0,ItemKNN
+647049,0.0,0.0,0.0,1,0,ItemKNN
+652524,0.0,0.0,0.0,1,0,ItemKNN
+686800,0.0,0.0,0.0,1,0,ItemKNN
+687082,0.0,0.0,0.0,2,0,ItemKNN
+706937,0.0,0.0,0.0,1,0,ItemKNN
+711583,0.0,0.0,0.0,1,0,ItemKNN
+721593,0.5,1.0,0.1,1,1,ItemKNN
+729150,0.0,0.0,0.0,2,0,ItemKNN
+736179,0.3065735963827292,0.5,0.1,2,1,ItemKNN
+741639,0.0,0.0,0.0,2,0,ItemKNN
+744904,0.0,0.0,0.0,1,0,ItemKNN
+750425,0.0,0.0,0.0,1,0,ItemKNN
+757972,0.0,0.0,0.0,1,0,ItemKNN
+763141,0.19342640361727081,0.5,0.1,2,1,ItemKNN
+770680,0.0,0.0,0.0,1,0,ItemKNN
+780298,0.0,0.0,0.0,1,0,ItemKNN
+798002,0.0,0.0,0.0,3,0,ItemKNN
+799331,0.0,0.0,0.0,1,0,ItemKNN
+799931,0.0,0.0,0.0,1,0,ItemKNN
+804475,0.0,0.0,0.0,1,0,ItemKNN
+805200,0.0,0.0,0.0,1,0,ItemKNN
+805630,0.0,0.0,0.0,1,0,ItemKNN
+827075,0.0,0.0,0.0,1,0,ItemKNN
+837756,0.0,0.0,0.0,1,0,ItemKNN
+854304,0.0,0.0,0.0,1,0,ItemKNN
+856874,0.43067655807339306,1.0,0.1,1,1,ItemKNN
+886905,0.0,0.0,0.0,3,0,ItemKNN
+892013,0.0,0.0,0.0,1,0,ItemKNN
+896066,0.0,0.0,0.0,6,0,ItemKNN
+921845,0.0,0.0,0.0,1,0,ItemKNN
+957186,0.0,0.0,0.0,2,0,ItemKNN
+957746,0.0,0.0,0.0,1,0,ItemKNN
+960773,0.0,0.0,0.0,1,0,ItemKNN
+962631,0.0,0.0,0.0,6,0,ItemKNN
+963348,0.0,0.0,0.0,1,0,ItemKNN
+971698,0.0,0.0,0.0,1,0,ItemKNN
+978575,0.0,0.0,0.0,1,0,ItemKNN
+989691,0.0,0.0,0.0,1,0,ItemKNN
+1015599,0.0,0.0,0.0,3,0,ItemKNN
+1042749,0.0,0.0,0.0,1,0,ItemKNN
+1046432,0.0,0.0,0.0,1,0,ItemKNN
+1053783,0.0,0.0,0.0,1,0,ItemKNN
+1094984,0.0,0.0,0.0,1,0,ItemKNN
+1102098,0.0,0.0,0.0,6,0,ItemKNN
+1104027,0.0,0.0,0.0,2,0,ItemKNN
+1109474,0.0,0.0,0.0,3,0,ItemKNN
+1126569,0.19930623359011804,0.12,0.3,25,3,ItemKNN
+1133112,0.0,0.0,0.0,2,0,ItemKNN
+1155064,0.0,0.0,0.0,1,0,ItemKNN
+1163391,0.0,0.0,0.0,1,0,ItemKNN
+1185408,0.0,0.0,0.0,1,0,ItemKNN
+1188952,0.0,0.0,0.0,7,0,ItemKNN
+1202842,0.0,0.0,0.0,1,0,ItemKNN
+1204741,0.0,0.0,0.0,1,0,ItemKNN
+1211432,0.0,0.0,0.0,1,0,ItemKNN
+1245778,0.0,0.0,0.0,1,0,ItemKNN
+1248329,0.0,0.0,0.0,1,0,ItemKNN
+1254385,0.0,0.0,0.0,1,0,ItemKNN
+1254737,0.0,0.0,0.0,1,0,ItemKNN
+1271661,0.0,0.0,0.0,1,0,ItemKNN
+1273306,0.0,0.0,0.0,3,0,ItemKNN
+1321299,0.0,0.0,0.0,1,0,ItemKNN
+1324082,0.0,0.0,0.0,1,0,ItemKNN
+1327189,0.0,0.0,0.0,1,0,ItemKNN
+1336835,0.09803928583135704,0.2,0.1,5,1,ItemKNN
+1349681,0.0,0.0,0.0,1,0,ItemKNN
+1350407,0.0,0.0,0.0,2,0,ItemKNN
+1357083,0.0,0.0,0.0,2,0,ItemKNN
+1358298,0.5842273861585908,0.5,0.3,6,3,ItemKNN
+1379807,0.0,0.0,0.0,1,0,ItemKNN
+1391782,0.38685280723454163,0.5,0.1,2,1,ItemKNN
+1392512,0.0,0.0,0.0,1,0,ItemKNN
+1393838,0.0,0.0,0.0,1,0,ItemKNN
+1394708,0.0,0.0,0.0,1,0,ItemKNN
+1399936,0.0,0.0,0.0,1,0,ItemKNN
+1403394,0.0,0.0,0.0,1,0,ItemKNN
+1406236,0.0,0.0,0.0,1,0,ItemKNN
+17939,0.0,0.0,0.0,1,0,implicit ALS
+28995,0.0,0.0,0.0,1,0,implicit ALS
+38102,0.0,0.0,0.0,1,0,implicit ALS
+42896,0.6309297535714575,1.0,0.1,1,1,implicit ALS
+49384,0.0,0.0,0.0,1,0,implicit ALS
+61715,0.0,0.0,0.0,2,0,implicit ALS
+106649,0.0,0.0,0.0,1,0,implicit ALS
+108759,0.0,0.0,0.0,2,0,implicit ALS
+121975,0.43067655807339306,1.0,0.1,1,1,implicit ALS
+141989,0.0,0.0,0.0,1,0,implicit ALS
+142237,0.31546487678572877,1.0,0.1,1,1,implicit ALS
+142581,0.0,0.0,0.0,1,0,implicit ALS
+144527,0.0,0.0,0.0,1,0,implicit ALS
+165401,0.0,0.0,0.0,1,0,implicit ALS
+175890,0.0,0.0,0.0,1,0,implicit ALS
+196209,0.0,0.0,0.0,1,0,implicit ALS
+198153,0.0,0.0,0.0,4,0,implicit ALS
+201720,0.0,0.0,0.0,1,0,implicit ALS
+207113,0.0,0.0,0.0,2,0,implicit ALS
+219759,1.0,1.0,0.1,1,1,implicit ALS
+225106,0.3010299956639812,1.0,0.1,1,1,implicit ALS
+229157,0.0,0.0,0.0,2,0,implicit ALS
+234313,0.3333333333333333,1.0,0.1,1,1,implicit ALS
+244076,0.0,0.0,0.0,1,0,implicit ALS
+246506,0.0,0.0,0.0,1,0,implicit ALS
+247633,0.0,0.0,0.0,1,0,implicit ALS
+262768,0.0,0.0,0.0,1,0,implicit ALS
+271331,0.0,0.0,0.0,1,0,implicit ALS
+272741,0.0,0.0,0.0,2,0,implicit ALS
+274981,0.0,0.0,0.0,1,0,implicit ALS
+283803,0.0,0.0,0.0,1,0,implicit ALS
+284741,0.0,0.0,0.0,1,0,implicit ALS
+292557,0.0,0.0,0.0,1,0,implicit ALS
+295158,0.0,0.0,0.0,2,0,implicit ALS
+295384,0.0,0.0,0.0,3,0,implicit ALS
+303684,0.0,0.0,0.0,2,0,implicit ALS
+304981,0.0,0.0,0.0,1,0,implicit ALS
+306568,0.0,0.0,0.0,1,0,implicit ALS
+310759,0.0,0.0,0.0,6,0,implicit ALS
+316235,0.0,0.0,0.0,1,0,implicit ALS
+316850,0.0,0.0,0.0,12,0,implicit ALS
+333141,0.0,0.0,0.0,1,0,implicit ALS
+346556,0.0,0.0,0.0,1,0,implicit ALS
+349829,0.41183384043543503,1.0,0.2,2,2,implicit ALS
+350050,0.0,0.0,0.0,1,0,implicit ALS
+354084,0.0,0.0,0.0,1,0,implicit ALS
+354242,1.0,1.0,0.1,1,1,implicit ALS
+372907,0.0,0.0,0.0,1,0,implicit ALS
+374363,0.0,0.0,0.0,1,0,implicit ALS
+400676,0.0,0.0,0.0,1,0,implicit ALS
+417477,0.0,0.0,0.0,1,0,implicit ALS
+430913,0.0,0.0,0.0,2,0,implicit ALS
+454812,0.0,0.0,0.0,1,0,implicit ALS
+491226,0.0,0.0,0.0,1,0,implicit ALS
+500130,0.0,0.0,0.0,1,0,implicit ALS
+528691,0.0,0.0,0.0,2,0,implicit ALS
+529585,0.3010299956639812,1.0,0.1,1,1,implicit ALS
+529925,0.0,0.0,0.0,1,0,implicit ALS
+530559,0.15457433957839828,0.058823529411764705,0.2,34,2,implicit ALS
+541834,0.0,0.0,0.0,1,0,implicit ALS
+545014,0.0,0.0,0.0,1,0,implicit ALS
+566009,0.0,0.0,0.0,1,0,implicit ALS
+576870,1.0,1.0,0.1,1,1,implicit ALS
+589890,0.0,0.0,0.0,4,0,implicit ALS
+596422,0.0,0.0,0.0,1,0,implicit ALS
+602957,0.0,0.0,0.0,1,0,implicit ALS
+608700,0.0,0.0,0.0,1,0,implicit ALS
+611065,0.0,0.0,0.0,1,0,implicit ALS
+621451,0.0,0.0,0.0,1,0,implicit ALS
+638482,0.0,0.0,0.0,3,0,implicit ALS
+642808,0.0,0.0,0.0,1,0,implicit ALS
+647049,0.0,0.0,0.0,1,0,implicit ALS
+652524,0.0,0.0,0.0,1,0,implicit ALS
+686800,0.0,0.0,0.0,1,0,implicit ALS
+687082,0.0,0.0,0.0,2,0,implicit ALS
+706937,0.0,0.0,0.0,1,0,implicit ALS
+711583,0.0,0.0,0.0,1,0,implicit ALS
+721593,0.31546487678572877,1.0,0.1,1,1,implicit ALS
+729150,0.0,0.0,0.0,2,0,implicit ALS
+736179,0.5912352048230277,1.0,0.2,2,2,implicit ALS
+741639,0.0,0.0,0.0,2,0,implicit ALS
+744904,0.0,0.0,0.0,1,0,implicit ALS
+750425,0.0,0.0,0.0,1,0,implicit ALS
+757972,0.0,0.0,0.0,1,0,implicit ALS
+763141,0.0,0.0,0.0,2,0,implicit ALS
+770680,0.0,0.0,0.0,1,0,implicit ALS
+780298,0.0,0.0,0.0,1,0,implicit ALS
+798002,0.0,0.0,0.0,3,0,implicit ALS
+799331,0.0,0.0,0.0,1,0,implicit ALS
+799931,0.0,0.0,0.0,1,0,implicit ALS
+804475,0.0,0.0,0.0,1,0,implicit ALS
+805200,0.0,0.0,0.0,1,0,implicit ALS
+805630,0.0,0.0,0.0,1,0,implicit ALS
+827075,0.0,0.0,0.0,1,0,implicit ALS
+837756,0.0,0.0,0.0,1,0,implicit ALS
+854304,0.0,0.0,0.0,1,0,implicit ALS
+856874,0.0,0.0,0.0,1,0,implicit ALS
+886905,0.0,0.0,0.0,3,0,implicit ALS
+892013,0.0,0.0,0.0,1,0,implicit ALS
+896066,0.0,0.0,0.0,6,0,implicit ALS
+921845,0.0,0.0,0.0,1,0,implicit ALS
+957186,0.0,0.0,0.0,2,0,implicit ALS
+957746,0.0,0.0,0.0,1,0,implicit ALS
+960773,0.0,0.0,0.0,1,0,implicit ALS
+962631,0.0,0.0,0.0,6,0,implicit ALS
+963348,0.0,0.0,0.0,1,0,implicit ALS
+971698,0.0,0.0,0.0,1,0,implicit ALS
+978575,0.0,0.0,0.0,1,0,implicit ALS
+989691,0.0,0.0,0.0,1,0,implicit ALS
+1015599,0.0,0.0,0.0,3,0,implicit ALS
+1042749,0.0,0.0,0.0,1,0,implicit ALS
+1046432,0.0,0.0,0.0,1,0,implicit ALS
+1053783,0.0,0.0,0.0,1,0,implicit ALS
+1094984,0.0,0.0,0.0,1,0,implicit ALS
+1102098,0.0,0.0,0.0,6,0,implicit ALS
+1104027,0.0,0.0,0.0,2,0,implicit ALS
+1109474,0.35853358850813305,0.6666666666666666,0.2,3,2,implicit ALS
+1126569,0.07336392209936006,0.04,0.1,25,1,implicit ALS
+1133112,0.0,0.0,0.0,2,0,implicit ALS
+1155064,0.0,0.0,0.0,1,0,implicit ALS
+1163391,0.0,0.0,0.0,1,0,implicit ALS
+1185408,0.0,0.0,0.0,1,0,implicit ALS
+1188952,0.0,0.0,0.0,7,0,implicit ALS
+1202842,0.0,0.0,0.0,1,0,implicit ALS
+1204741,0.0,0.0,0.0,1,0,implicit ALS
+1211432,0.0,0.0,0.0,1,0,implicit ALS
+1245778,0.0,0.0,0.0,1,0,implicit ALS
+1248329,0.0,0.0,0.0,1,0,implicit ALS
+1254385,0.0,0.0,0.0,1,0,implicit ALS
+1254737,0.0,0.0,0.0,1,0,implicit ALS
+1271661,0.0,0.0,0.0,1,0,implicit ALS
+1273306,0.0,0.0,0.0,3,0,implicit ALS
+1321299,0.0,0.0,0.0,1,0,implicit ALS
+1324082,0.0,0.0,0.0,1,0,implicit ALS
+1327189,0.0,0.0,0.0,1,0,implicit ALS
+1336835,0.10699313236726378,0.2,0.1,5,1,implicit ALS
+1349681,0.0,0.0,0.0,1,0,implicit ALS
+1350407,0.0,0.0,0.0,2,0,implicit ALS
+1357083,0.0,0.0,0.0,2,0,implicit ALS
+1358298,0.47254583883871204,0.5,0.3,6,3,implicit ALS
+1379807,0.0,0.0,0.0,1,0,implicit ALS
+1391782,0.38685280723454163,0.5,0.1,2,1,implicit ALS
+1392512,0.0,0.0,0.0,1,0,implicit ALS
+1393838,0.0,0.0,0.0,1,0,implicit ALS
+1394708,0.0,0.0,0.0,1,0,implicit ALS
+1399936,0.0,0.0,0.0,1,0,implicit ALS
+1403394,0.0,0.0,0.0,1,0,implicit ALS
+1406236,0.0,0.0,0.0,1,0,implicit ALS

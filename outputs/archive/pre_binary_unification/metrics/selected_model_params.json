@@ -1,0 +1,23 @@
+{
+  "selection_metric": "ndcg@10",
+  "random_seed": 42,
+  "validation_start": "2015-08-02 23:45:11.739000+00:00",
+  "itemknn": {
+    "parameters": {
+      "neighbors": 50,
+      "shrinkage": 10.0
+    },
+    "validation_ndcg@10": 0.06549960347292325
+  },
+  "implicit_als": {
+    "parameters": {
+      "factors": 64,
+      "regularization": 0.05,
+      "alpha": 10.0,
+      "iterations": 8,
+      "random_state": 42,
+      "num_threads": 1
+    },
+    "validation_ndcg@10": 0.07649436257505941
+  }
+}

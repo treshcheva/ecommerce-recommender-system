@@ -1,0 +1,7 @@
+generator,metric,cutoff,recall,users,split
+implicit ALS,Recall@100,100,0.22189368067360485,1627,validation
+ItemKNN,Recall@100,100,0.17557911331238496,1627,validation
+ItemKNN + implicit ALS (up to 200 unique),Recall@200,200,0.2533242194296756,1627,validation
+implicit ALS,Recall@100,100,0.16802865811244608,1058,test
+ItemKNN,Recall@100,100,0.1336635052043548,1058,test
+ItemKNN + implicit ALS (up to 200 unique),Recall@200,200,0.19757007156053427,1058,test

@@ -1,0 +1,28 @@
+{
+  "mode": "dev",
+  "status": "passed",
+  "tables_compared": [
+    "model_validation_metrics.csv",
+    "model_test_metrics.csv",
+    "itemknn_tuning_validation.csv",
+    "implicit_als_tuning_validation.csv",
+    "model_validation_paired_intervals.csv",
+    "model_test_paired_intervals.csv",
+    "ltr_validation_metrics.csv",
+    "ltr_test_metrics.csv",
+    "ltr_catboost_tuning_validation.csv",
+    "ltr_ablation_validation.csv",
+    "ltr_ablation_paired_intervals.csv",
+    "ltr_test_paired_intervals.csv",
+    "ltr_candidate_recall.csv",
+    "ltr_test_per_user.csv",
+    "ltr_ablation_per_user.csv"
+  ],
+  "selected_parameters_equal": true,
+  "rtol": 1e-07,
+  "atol": 1e-09,
+  "excluded_columns": [
+    "fit_seconds"
+  ],
+  "note": "Same data, environment, seed and search; repetition verifies reproducibility, not independent generalization."
+}

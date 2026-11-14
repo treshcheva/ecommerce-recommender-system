@@ -1,0 +1,103 @@
+mode  users  items  train_events  train_nnz  itemknn_pair_work  rank_train_users  rank_train_nnz  rank_itemknn_pair_work  rank_candidate_users  rank_candidate_rows_upper  itemknn_legacy_dense_allowance_mb  itemknn_planning_mb  rank_features_planning_mb  als_factor_arrays_mb  evaluation_score_work_upper  train_nnz_vs_dev  itemknn_pair_work_vs_dev  rank_itemknn_pair_work_vs_dev  rank_candidate_rows_upper_vs_dev  evaluation_score_work_upper_vs_dev
+ dev  20000   1500         50447      24543             442643             45908           56797                  990645                   922                     184400                         171.661377              9.88150                 180.078125              5.249023                     30000000          1.000000                  1.000000                       1.000000                          1.000000                            1.000000
+full  57811  10000        370990     189770            9957094             45908          156307                 7588907                  1985                     397000                        7629.394531             60.11261                 387.695312             16.555420                    578110000          7.732144                 22.494638                       7.660572                          2.152928                           19.270333
+Starting 02_modeling
+02_modeling cell 0: # 02 — Обучение и выбор рекомендательной модели  ## Постановка задачи  Для каждого известн
+02_modeling cell 1: ## Почему эти методы  - **Global Popularity** — понятный ориентир, который показывает, нас
+02_modeling cell 2: ## Что реализовано в проекте, а что даёт библиотека  Popularity и ItemKNN — проектные клас
+02_modeling cell 3: ## Хронологический протокол и границы бенчмарка  Порог истории пользователя (не менее пяти
+02_modeling cell 4: ## Единый протокол и режим бенчмарка  Основной протокол во всех ноутбуках — **binary relev
+02_modeling cell 5: from pathlib import Path import sys import json import time import numpy as np import pand
+02_modeling cell 6: ## Подбор параметров на validation  Для уменьшения стоимости поиска используется компактна
+02_modeling cell 7: itemknn_grid = [     {"neighbors": neighbors, "shrinkage": shrinkage}     for neighbors in
+02_modeling cell 8: ## Эксперимент 1 — ItemKNN  **Гипотеза.** Увеличение соседства с 25 до 50 добавит полезные
+02_modeling cell 9: itemknn_tuning = evaluate_recommender_grid(     train_benchmark, validation_benchmark, coh
+02_modeling cell 10: knn_effects = itemknn_tuning.pivot(index="neighbors", columns="shrinkage", values="ndcg@10
+02_modeling cell 11: ## Эксперимент 2 — ALS  **Гипотеза.** 64 фактора вместо 32 дадут более выразительные профи
+02_modeling cell 12: als_tuning = evaluate_recommender_grid(     train_benchmark, validation_benchmark, cohort,
+02_modeling cell 13: als_effect_rows = [] for parameter, low, high in [("factors", 32, 64), ("regularization", 
+02_modeling cell 14: ## Эксперимент 3 — персонализация против популярности  **Гипотеза.** ItemKNN и ALS использ
+02_modeling cell 15: itemknn_tuning.to_csv(METRICS / "itemknn_tuning_validation.csv", index=False) als_tuning.t
+02_modeling cell 16: fig, axes = plt.subplots(1, 2, figsize=(13, 5)) validation_results[["ndcg@10", "recall@10"
+02_modeling cell 17: als_score = validation_results.loc["implicit ALS", "ndcg@10"] knn_score = validation_resul
+02_modeling cell 18: from src.experiment_analysis import paired_metric_comparison uncertainty = paired_metric_c
+02_modeling cell 19: Интервал, включающий ноль, означает, что знак разницы не установлен этим анализом; интерва
+02_modeling cell 20: for row in uncertainty.itertuples():     supported = "интервал включает ноль; знак не уста
+Completed 02_modeling {'seconds': 172.70303483299998, 'sampled_process_tree_peak_rss_gib': 1.009033203125, 'notebook_sha256': '3b6fcb85490fb14330f58d089debe87e573aca00b22e15b263362772a3b665e4'}
+Starting 03_evaluation
+03_evaluation cell 0: # 03 — Финальная оценка, ошибки и рекомендации  ## Протокол финального теста  В этом ноутб
+03_evaluation cell 1: ## Метрики и cold-start  Primary metric — macro NDCG@10 с binary relevance: любой новый то
+03_evaluation cell 2: ## Единый протокол и режим бенчмарка  Основной протокол во всех ноутбуках — **binary relev
+03_evaluation cell 3: from pathlib import Path import sys import json import time import numpy as np import pand
+03_evaluation cell 4: ## Финальная модельная таблица  Четыре базовые и коллаборативные модели получают один и то
+03_evaluation cell 5: models = {} fit_seconds = {}   def fit_timed(name, factory):     started = time.perf_count
+03_evaluation cell 6: ## Анализ качества и ошибок  Средняя метрика может скрывать пользователей, которым модель 
+03_evaluation cell 7: fig, axes = plt.subplots(1, 2, figsize=(13, 5)) model_names = list(test_per_user) axes[0].
+03_evaluation cell 8: ## Cold-start: пользователи и товары  Пользователь относится к cold-start, если до начала 
+03_evaluation cell 9: known_users = set(history.visitorid.unique()) known_items = set(history.itemid.unique()) t
+03_evaluation cell 10: ## Пример рекомендаций и интерпретация  Ниже две таблицы одного пользователя. Первая — что
+03_evaluation cell 11: example_model = best_validation_model example_recommendations = test_recommendations[examp
+03_evaluation cell 12: ## Выводы и ограничения  Validation выбирает параметры и модель; test оценивает их один ра
+Completed 03_evaluation {'seconds': 24.254366750000003, 'sampled_process_tree_peak_rss_gib': 0.9878387451171875, 'notebook_sha256': 'f893e4b53aab2567d67237c2e58493b4dcb4822b0cec2a3c3288bf50f44d3f88'}
+Starting 04_learning_to_rank
+04_learning_to_rank cell 0: # 04 — Двухэтапная рекомендательная система с CatBoostRanker  В ноутбуке проверяется, улуч
+04_learning_to_rank cell 1: ## 1. Постановка задачи  Для каждого пользователя нужно рекомендовать до десяти ещё не про
+04_learning_to_rank cell 2: ## 2. Архитектура рекомендательной системы из двух этапов  ```mermaid flowchart LR   H[Ист
+04_learning_to_rank cell 3: ## Временной протокол и воспроизводимый эксперимент  Исходное хронологическое разбиение 70
+04_learning_to_rank cell 4: ## Единый протокол и режим бенчмарка  Основной протокол во всех ноутбуках — **binary relev
+04_learning_to_rank cell 5: from pathlib import Path import json import sys  import gc import matplotlib.pyplot as plt
+04_learning_to_rank cell 6: ## 3. Генерация кандидатов — обучающий срез  Обе модели обучаются только на ранней части и
+04_learning_to_rank cell 7: rank_history, rank_target, rank_cutoff = split_history_target(     train, history_fraction
+04_learning_to_rank cell 8: ## 4. Формирование признаков  Для каждого кандидата рассчитываются оценки и ранги моделей-
+04_learning_to_rank cell 9: feature_columns = RANKER_FEATURES FEATURE_LABELS = {     "als_score": "Оценка ALS", "als_r
+04_learning_to_rank cell 10: ## 5. Формирование целевой переменной  Кандидат получает метку 1, если пара пользователь–т
+04_learning_to_rank cell 11: ## 6. Обучение и небольшой поиск CatBoostRanker  Сравним три конфигурации с одинаковым see
+04_learning_to_rank cell 12: train_users_for_eval = sorted(validation_benchmark.visitorid.astype(int).unique()) validat
+04_learning_to_rank cell 13: cb = catboost_tuning.set_index(["depth", "learning_rate"]) base = cb.loc[(6, .05), "ndcg@1
+04_learning_to_rank cell 14: ## Абляция признаков  **Гипотеза.** Числовые оценки генераторов и признаки популярности/ак
+04_learning_to_rank cell 15: cf_score_features = {"als_score", "itemknn_score"} popularity_activity_features = {     fe
+04_learning_to_rank cell 16: full_ndcg = ablation_results.set_index("variant").loc["Все признаки", "ndcg@10"] for row i
+04_learning_to_rank cell 17: ## 7. Сравнение систем на validation и закрытом test  **Гипотеза.** Ранжировщик улучшит по
+04_learning_to_rank cell 18: validation_ranker = CandidateRankerRecommender(ranker, validation_features, snapshot_id="v
+mode  users  items  train_events  train_nnz  itemknn_pair_work  rank_train_users  rank_train_nnz  rank_itemknn_pair_work  rank_candidate_users  rank_candidate_rows_upper  itemknn_legacy_dense_allowance_mb  itemknn_planning_mb  rank_features_planning_mb  als_factor_arrays_mb  evaluation_score_work_upper  train_nnz_vs_dev  itemknn_pair_work_vs_dev  rank_itemknn_pair_work_vs_dev  rank_candidate_rows_upper_vs_dev  evaluation_score_work_upper_vs_dev
+ dev  20000   1500         50447      24543             442643             45908           56797                  990645                   922                     184400                         171.661377              9.88150                 180.078125              5.249023                     30000000          1.000000                  1.000000                       1.000000                          1.000000                            1.000000
+full  57811  10000        370990     189770            9957094             45908          156307                 7588907                  1985                     397000                        7629.394531             60.11261                 387.695312             16.555420                    578110000          7.732144                 22.494638                       7.660572                          2.152928                           19.270333
+Skip successfully completed 02_modeling
+Skip successfully completed 03_evaluation
+Starting 04_learning_to_rank
+04_learning_to_rank cell 0: # 04 — Двухэтапная рекомендательная система с CatBoostRanker  В ноутбуке проверяется, улуч
+04_learning_to_rank cell 1: ## 1. Постановка задачи  Для каждого пользователя нужно рекомендовать до десяти ещё не про
+04_learning_to_rank cell 2: ## 2. Архитектура рекомендательной системы из двух этапов  ```mermaid flowchart LR   H[Ист
+04_learning_to_rank cell 3: ## Временной протокол и воспроизводимый эксперимент  Исходное хронологическое разбиение 70
+04_learning_to_rank cell 4: ## Единый протокол и режим бенчмарка  Основной протокол во всех ноутбуках — **binary relev
+04_learning_to_rank cell 5: from pathlib import Path import json import sys  import gc import matplotlib.pyplot as plt
+04_learning_to_rank cell 6: ## 3. Генерация кандидатов — обучающий срез  Обе модели обучаются только на ранней части и
+04_learning_to_rank cell 7: rank_history, rank_target, rank_cutoff = split_history_target(     train, history_fraction
+04_learning_to_rank cell 8: ## 4. Формирование признаков  Для каждого кандидата рассчитываются оценки и ранги моделей-
+04_learning_to_rank cell 9: feature_columns = RANKER_FEATURES FEATURE_LABELS = {     "als_score": "Оценка ALS", "als_r
+04_learning_to_rank cell 10: ## 5. Формирование целевой переменной  Кандидат получает метку 1, если пара пользователь–т
+04_learning_to_rank cell 11: ## 6. Обучение и небольшой поиск CatBoostRanker  Сравним три конфигурации с одинаковым see
+04_learning_to_rank cell 12: train_users_for_eval = sorted(validation_benchmark.visitorid.astype(int).unique()) validat
+04_learning_to_rank cell 13: cb = catboost_tuning.set_index(["depth", "learning_rate"]) base = cb.loc[(6, .05), "ndcg@1
+04_learning_to_rank cell 14: ## Абляция признаков  **Гипотеза.** Числовые оценки генераторов и признаки популярности/ак
+04_learning_to_rank cell 15: cf_score_features = {"als_score", "itemknn_score"} popularity_activity_features = {     fe
+04_learning_to_rank cell 16: full_ndcg = ablation_results.set_index("variant").loc["Все признаки", "ndcg@10"] for row i
+04_learning_to_rank cell 17: ## 7. Сравнение систем на validation и закрытом test  **Гипотеза.** Ранжировщик улучшит по
+04_learning_to_rank cell 18: validation_ranker = CandidateRankerRecommender(ranker, validation_features, snapshot_id="v
+04_learning_to_rank cell 19: ranker_name = "CatBoostRanker (ALS + ItemKNN)" r = test_results.loc[ranker_name, "ndcg@10"
+04_learning_to_rank cell 20: from src.experiment_analysis import paired_metric_comparison test_intervals = paired_metri
+04_learning_to_rank cell 21: Отрицательная разница означает преимущество CatBoost; если весь интервал ниже нуля, данные
+04_learning_to_rank cell 22: for row in test_intervals.itertuples():     verdict = "знак не установлен (ноль внутри CI)
+04_learning_to_rank cell 23: ## Полнота кандидатов  **Гипотеза.** Объединение ALS и ItemKNN найдёт больше будущих целей
+04_learning_to_rank cell 24: validation_candidate_recall = candidate_recall(     validation_candidates, validation, tra
+04_learning_to_rank cell 25: candidate_recall_results.assign(label=lambda f: f["generator"] + " — " + f["metric"]).pivo
+04_learning_to_rank cell 26: for split, frame in candidate_recall_results.groupby("split"):     union = frame.loc[frame
+04_learning_to_rank cell 27: ## 8. Важность признаков и сравнение моделей  Важность признаков описывает вклад в работу 
+04_learning_to_rank cell 28: metric_names = ["ndcg@10", "recall@10", "precision@10", "coverage@10"] comparison = pd.con
+04_learning_to_rank cell 29: display(Markdown("**Вывод по важности.** Первые пять признаков текущей модели: " + ", ".jo
+04_learning_to_rank cell 30: ## 9. Анализ активности и ошибок  Качество измеряется отдельно в трёх группах пользователе
+04_learning_to_rank cell 31: activity = (     test_features.groupby("user_id", as_index=False)["user_total_events"]    
+04_learning_to_rank cell 32: group_scores = activity_results.pivot(index="activity_group", columns="model", values="ndc
+04_learning_to_rank cell 33: ## 10. Выводы и ограничения  Ни одна конфигурация не выбирается по тестовой выборке: парам
+04_learning_to_rank cell 34: ranker.save_model(str(MODELS / "catboost_ranker.cbm")) experiment_config = {     "catboost
+Completed 04_learning_to_rank {'seconds': 171.579392375, 'sampled_process_tree_peak_rss_gib': 1.064208984375, 'notebook_sha256': '269ad779086172cd601947fd13dabb3ce01bb6b283834abf203d11e54e15fd9d'}

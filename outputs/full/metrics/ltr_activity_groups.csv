@@ -1,0 +1,16 @@
+model,activity_group,ndcg@10,users
+Global Popularity,Низкая,0.002899202150671191,376
+Global Popularity,Средняя,0.005706544383561342,355
+Global Popularity,Высокая,0.011144095675921778,327
+Recent Popularity (14d),Низкая,0.00322945817209456,376
+Recent Popularity (14d),Средняя,0.004744292664801372,355
+Recent Popularity (14d),Высокая,0.009076204106149711,327
+ItemKNN,Низкая,0.021246177617267544,376
+ItemKNN,Средняя,0.0471304909032619,355
+ItemKNN,Высокая,0.04085073484785093,327
+implicit ALS,Низкая,0.01999201341876256,376
+implicit ALS,Средняя,0.04724666681112518,355
+implicit ALS,Высокая,0.02821703820914574,327
+CatBoostRanker (ALS + ItemKNN),Низкая,0.027089572390980428,376
+CatBoostRanker (ALS + ItemKNN),Средняя,0.06149431235729646,355
+CatBoostRanker (ALS + ItemKNN),Высокая,0.04623476080103894,327

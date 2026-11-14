@@ -1,0 +1,189 @@
+{
+  "catboost_version": "1.2.7",
+  "benchmark": {
+    "config": {
+      "mode": "full",
+      "max_users": 100000,
+      "max_items": 10000,
+      "min_history": 5,
+      "seed": 42,
+      "k": 10,
+      "candidates_per_model": 100,
+      "relevance_mode": "binary"
+    },
+    "train_sha256": "dec5513b7ce7f10314edac1e2b6de6d62425a2aaca48c72d8744bb49b09450a3",
+    "train_start": "2015-05-03 03:00:04.384000+00:00",
+    "train_end": "2015-08-02 23:45:04.466000+00:00",
+    "train_rows": 1929488,
+    "cohort_sha256": "d5e28c27de2a76df47dcbd9dc522b281a1258f356a1c23d8ac2ce6877fabb52c",
+    "catalog_sha256": "5e3b8b9d4bb5a2d095caf94afc342abb22731b598b668d5713a866a44dc39229",
+    "users": 57811,
+    "items": 10000
+  },
+  "relevance_mode": "binary",
+  "ranker_params": {
+    "iterations": 500,
+    "depth": 4,
+    "learning_rate": 0.05,
+    "loss_function": "YetiRank",
+    "eval_metric": "NDCG:top=10",
+    "random_seed": 42,
+    "verbose": false,
+    "allow_writing_files": false,
+    "thread_count": 4
+  },
+  "selected_base_params": {
+    "selection_metric": "ndcg@10",
+    "relevance_mode": "binary",
+    "benchmark": {
+      "config": {
+        "mode": "full",
+        "max_users": 100000,
+        "max_items": 10000,
+        "min_history": 5,
+        "seed": 42,
+        "k": 10,
+        "candidates_per_model": 100,
+        "relevance_mode": "binary"
+      },
+      "train_sha256": "dec5513b7ce7f10314edac1e2b6de6d62425a2aaca48c72d8744bb49b09450a3",
+      "train_start": "2015-05-03 03:00:04.384000+00:00",
+      "train_end": "2015-08-02 23:45:04.466000+00:00",
+      "train_rows": 1929488,
+      "cohort_sha256": "d5e28c27de2a76df47dcbd9dc522b281a1258f356a1c23d8ac2ce6877fabb52c",
+      "catalog_sha256": "5e3b8b9d4bb5a2d095caf94afc342abb22731b598b668d5713a866a44dc39229",
+      "users": 57811,
+      "items": 10000
+    },
+    "random_seed": 42,
+    "validation_start": "2015-08-02 23:45:11.739000+00:00",
+    "itemknn": {
+      "parameters": {
+        "neighbors": 25,
+        "shrinkage": 10.0
+      },
+      "validation_ndcg@10": 0.059975091607781576
+    },
+    "implicit_als": {
+      "parameters": {
+        "factors": 64,
+        "regularization": 0.05,
+        "alpha": 20.0,
+        "iterations": 8,
+        "random_state": 42,
+        "num_threads": 1
+      },
+      "validation_ndcg@10": 0.053008999087408255
+    }
+  },
+  "catboost_tuning_validation": [
+    {
+      "name": "\u0413\u043b\u0443\u0431\u0438\u043d\u0430 6, \u0448\u0430\u0433 0,05 (\u0438\u0441\u0445\u043e\u0434\u043d\u0430\u044f)",
+      "depth": 6,
+      "learning_rate": 0.05,
+      "best_iteration": 77,
+      "ndcg@10": 0.0651525892730513,
+      "recall@10": 0.0953359838336481,
+      "precision@10": 0.0207744314689612,
+      "coverage@10": 0.4107,
+      "evaluated_users": 1627,
+      "catalog_items": 10000,
+      "recommended_unique_items": 4107
+    },
+    {
+      "name": "\u0413\u043b\u0443\u0431\u0438\u043d\u0430 4, \u0448\u0430\u0433 0,05",
+      "depth": 4,
+      "learning_rate": 0.05,
+      "best_iteration": 33,
+      "ndcg@10": 0.0658064709228664,
+      "recall@10": 0.0986649173415276,
+      "precision@10": 0.0213275968039336,
+      "coverage@10": 0.4226,
+      "evaluated_users": 1627,
+      "catalog_items": 10000,
+      "recommended_unique_items": 4226
+    },
+    {
+      "name": "\u0413\u043b\u0443\u0431\u0438\u043d\u0430 6, \u0448\u0430\u0433 0,03",
+      "depth": 6,
+      "learning_rate": 0.03,
+      "best_iteration": 40,
+      "ndcg@10": 0.0657443840008961,
+      "recall@10": 0.098937691712448,
+      "precision@10": 0.0216963736939151,
+      "coverage@10": 0.4217,
+      "evaluated_users": 1627,
+      "catalog_items": 10000,
+      "recommended_unique_items": 4217
+    }
+  ],
+  "feature_ablation_validation": [
+    {
+      "variant": "\u0412\u0441\u0435 \u043f\u0440\u0438\u0437\u043d\u0430\u043a\u0438",
+      "feature_count": 18,
+      "best_iteration": 33,
+      "ndcg@10": 0.0658064709228664,
+      "recall@10": 0.0986649173415276,
+      "precision@10": 0.0213275968039336,
+      "coverage@10": 0.4226,
+      "evaluated_users": 1627,
+      "catalog_items": 10000,
+      "recommended_unique_items": 4226
+    },
+    {
+      "variant": "\u0411\u0435\u0437 \u043e\u0446\u0435\u043d\u043e\u043a ALS/ItemKNN",
+      "feature_count": 16,
+      "best_iteration": 32,
+      "ndcg@10": 0.064860808906934,
+      "recall@10": 0.0967726527231166,
+      "precision@10": 0.0208358942839582,
+      "coverage@10": 0.4148,
+      "evaluated_users": 1627,
+      "catalog_items": 10000,
+      "recommended_unique_items": 4148
+    },
+    {
+      "variant": "\u0411\u0435\u0437 \u0432\u0441\u0435\u0445 \u043f\u0440\u0438\u0437\u043d\u0430\u043a\u043e\u0432 ALS/ItemKNN",
+      "feature_count": 11,
+      "best_iteration": 89,
+      "ndcg@10": 0.022725609232627,
+      "recall@10": 0.0371404622461467,
+      "precision@10": 0.0099569760295021,
+      "coverage@10": 0.0711,
+      "evaluated_users": 1627,
+      "catalog_items": 10000,
+      "recommended_unique_items": 711
+    },
+    {
+      "variant": "\u0411\u0435\u0437 \u043f\u043e\u043f\u0443\u043b\u044f\u0440\u043d\u043e\u0441\u0442\u0438/\u0430\u043a\u0442\u0438\u0432\u043d\u043e\u0441\u0442\u0438",
+      "feature_count": 7,
+      "best_iteration": 32,
+      "ndcg@10": 0.0623154150943433,
+      "recall@10": 0.0929579392172701,
+      "precision@10": 0.0204056545789797,
+      "coverage@10": 0.4297,
+      "evaluated_users": 1627,
+      "catalog_items": 10000,
+      "recommended_unique_items": 4297
+    }
+  ],
+  "selected_catboost_configuration": "\u0413\u043b\u0443\u0431\u0438\u043d\u0430 4, \u0448\u0430\u0433 0,05",
+  "selected_catboost_validation_ndcg@10": 0.0658064709228664,
+  "best_iteration": 33,
+  "early_stopping_rounds": 50,
+  "random_seed": 42,
+  "candidate_generators": [
+    "implicit ALS",
+    "ItemKNN"
+  ],
+  "candidates_per_generator": 100,
+  "rank_training_snapshot_start": "2015-05-03 03:00:04.384000+00:00",
+  "rank_training_snapshot_cutoff": "2015-07-16 13:34:50.605000+00:00",
+  "rank_training_target_end": "2015-08-02 23:45:04.466000+00:00",
+  "validation_start": "2015-08-02 23:45:11.739000+00:00",
+  "test_start": "2015-08-25 22:39:44.906000+00:00",
+  "benchmark_users": 57811,
+  "rank_training_users": 45908,
+  "catalog_items": 10000,
+  "relevance": "binary future user-item interaction"
+}

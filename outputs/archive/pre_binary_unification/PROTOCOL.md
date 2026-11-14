@@ -1,0 +1,1 @@
+Historical research before binary protocol unification. Notebooks 02–03 used graded NDCG; 04 used binary NDCG but base parameters were selected using graded NDCG. Candidate union recall was incorrectly labeled @100 despite up to 200 candidates. Retained for provenance only; use current notebooks and outputs for primary results.
