@@ -24,8 +24,6 @@ The table reports performance on the **expanded (`full`) chronological test benc
 
 The expanded benchmark evaluated **1,058 test users** with eligible new in-catalog interactions, using a train-selected catalog of **10,000 items**. The smaller dev benchmark uses a different cohort and catalog, so its scores should not be compared as if they were controlled improvements.
 
-![Expanded benchmark: paired NDCG confidence intervals](outputs/full/figures/catboost_test_contrasts.png)
-
 More detail: [full experiment report](outputs/full/REPORT.md) · [dev/full comparison](outputs/full/metrics/dev_full_comparison.csv) · [paired test contrasts](outputs/full/metrics/catboost_test_contrasts.csv).
 
 ## Recommendation pipeline
